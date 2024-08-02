@@ -1,15 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AdoNetCore.AseClient;
+using Microsoft.EntityFrameworkCore;
 using PrecierosEC.Core.Utiliies;
 
 namespace PrecierosEC.Infraestructure.Data
 {
     public partial class Context : DbContext
     {
-
         public Context()
         {
         }
-
         public Context(DbContextOptions<Context> options)
             : base(options)
         {
@@ -21,9 +20,9 @@ namespace PrecierosEC.Infraestructure.Data
             optionsBuilder.EnableSensitiveDataLogging();
             if (!optionsBuilder.IsConfigured)
             {
-
+                
             }
-                //optionsBuilder.UseSqlServer(AppConfiguration.ConnectionString);
+                
         }
 
 

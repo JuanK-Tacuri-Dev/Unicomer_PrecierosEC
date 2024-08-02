@@ -16,5 +16,11 @@
 
         public static string ConnectionString { get; set; }
         public static string ConnectionLogsString { get; set; }
+
+
+
+        public static string ApiData { get; set; }
+        public static string NonUserLog { get; set; }
+        public static string Custom { get; set; }
     }
 }

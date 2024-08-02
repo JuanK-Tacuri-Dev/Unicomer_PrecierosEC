@@ -22,6 +22,12 @@ namespace PrecierosEC.Core.Utiliies
             AppConfiguration.NameApi_ContactEmail = settings.NameApi.Contact.Email;
             AppConfiguration.NameApi_ContactUrl = settings.NameApi.Contact.Url;
 
+
+            AppConfiguration.ApiData = settings.ErrorLogSource.ApiData;
+            AppConfiguration.NonUserLog = settings.ErrorLogSource.NonUserLog;
+            AppConfiguration.Custom = settings.ErrorLogSource.Custom;
+
+
             //DatabaseCredential Credential;
             //if (settings.Credentials is not null)
             //{
@@ -114,9 +120,6 @@ namespace PrecierosEC.Core.Utiliies
 
 
 
-            ////ErrorLogSource.ApiData = configuration["ErrorLogSource:ApiData"];
-            ////ErrorLogSource.NonUserLog = configuration["ErrorLogSource:NonUserLog"];
-            ////ErrorLogSource.Custom = configuration["ErrorLogSource:Custom"];
 
 
 

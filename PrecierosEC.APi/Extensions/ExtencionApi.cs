@@ -1,6 +1,6 @@
-﻿using PrecierosEC.Core.Interface;
-using PrecierosEC.Core.Utiliies;
-using PrecierosEC.Infraestructure;
+﻿using PrecierosEC.Core.Interface.Service;
+using PrecierosEC.Core.Repositories;
+using PrecierosEC.Core.Service;
 
 namespace PrecierosEC.APi.Extensions
 {
@@ -10,9 +10,8 @@ namespace PrecierosEC.APi.Extensions
         {
             
             services.AddControllers();
-            //services.AddScoped<ISqlServiceErrorLog, SqlServiceErrorLog>();
-            services.AddScoped(typeof(IRepositorio<>), typeof(Repositorio<>));
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IServiceErrorLog, ServiceErrorLog>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

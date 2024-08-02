@@ -29,7 +29,7 @@ namespace PrecierosEC.Core.Extensions
 
  
 
-        public static void SwaggerGenAndSecurityToken(this IServiceCollection services)
+        public static void SwaggerGen(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
@@ -53,28 +53,6 @@ namespace PrecierosEC.Core.Extensions
 
         }
 
-        public static void SwaggerGenAndSecurityBasic(this IServiceCollection services)
-        {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc(AppConfiguration.NameApi_Name, new OpenApiInfo
-                {
-                    Title = AppConfiguration.NameApi_Title,
-                    Version = AppConfiguration.NameApi_Version,
-                    Description = AppConfiguration.NameApi_Description,
-                    TermsOfService = new Uri(AppConfiguration.NameApi_TermsOfService),
-                    Contact = new OpenApiContact
-                    {
-                        Name = AppConfiguration.NameApi_ContactName,
-                        Email = AppConfiguration.NameApi_ContactEmail,
-                        Url = new Uri(AppConfiguration.NameApi_ContactUrl),
-                    }
-                });
-
-
-            });
-        }
-        
     }
 
 }

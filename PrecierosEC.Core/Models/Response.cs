@@ -15,7 +15,7 @@ namespace PrecierosEC.Core.Models
 
     public class ResponseData
     {
-        public static Response<T> GetResponse<T>(bool exito, string mensaje, T info)
+        public static Response<T> GetResponse<T>( string mensaje, T info, bool exito = true)
         {
             return new Response<T>
             {

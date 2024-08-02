@@ -8,7 +8,6 @@ namespace PrecierosEC.Core.Utiliies
 {
     public class ApiSettings
     {
-
         public Credentials Credentials { get; set; }
         public LOG LOG { get; set; }
         public Errorlogsource ErrorLogSource { get; set; }
@@ -20,28 +19,21 @@ namespace PrecierosEC.Core.Utiliies
         public bool Habilitar { get; set; }
         public int DefaultConexion { get; set; }
         public int Destino { get; set; }
-        public Variablelocal VariableLocal { get; set; }
-        public Appsettings Appsettings { get; set; }
+        public Conectiondatabase ConectionDatabase { get; set; }
     }
 
-    public class Variablelocal
-    {
-        public string Conection { get; set; }
-    }
-
-    public class Appsettings
+    public class Conectiondatabase
     {
         public string Server { get; set; }
         public string Database { get; set; }
         public string User { get; set; }
         public string Pwd { get; set; }
+        public string Port { get; set; }
     }
 
     public class LOG
     {
         public bool Habilitar { get; set; }
-        public int DefaultLogs { get; set; }
-        public int Destino { get; set; }
         public Database DataBase { get; set; }
     }
 
@@ -52,25 +44,17 @@ namespace PrecierosEC.Core.Utiliies
 
     public class Credentials1
     {
-        public bool Habilitar { get; set; }
-        public int DefaultConexion { get; set; }
-        public int Destino { get; set; }
-        public Variablelocal1 VariableLocal { get; set; }
-        public Appsettings1 Appsettings { get; set; }
+        public Conectiondatabase1 ConectionDatabase { get; set; }
     }
 
-    public class Variablelocal1
-    {
-        public string Conection { get; set; }
-    }
-
-    public class Appsettings1
+    public class Conectiondatabase1
     {
         public string Provider { get; set; }
         public string Server { get; set; }
         public string Database { get; set; }
         public string User { get; set; }
         public string Pwd { get; set; }
+        public string Port { get; set; }
     }
 
     public class Errorlogsource
@@ -97,5 +81,6 @@ namespace PrecierosEC.Core.Utiliies
         public string Url { get; set; }
     }
 
-
 }
+
+

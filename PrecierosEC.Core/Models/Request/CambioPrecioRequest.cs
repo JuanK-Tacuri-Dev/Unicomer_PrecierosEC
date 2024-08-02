@@ -3,11 +3,11 @@
     public class CambioPrecioRequest
     {
 
-        public int limit { get; set; }
-        public int offset { get; set; }
-        public int country { get; set; }
-        public int fecha { get; set; }
-        public int clase { get; set; }
-        public int departamento { get; set; }
+        public string limit { get; set; }
+        public string offset { get; set; }
+        public string country { get; set; }
+        public string fecha { get; set; }
+        public string clase { get; set; }
+        public string departamento { get; set; }
     }
 }

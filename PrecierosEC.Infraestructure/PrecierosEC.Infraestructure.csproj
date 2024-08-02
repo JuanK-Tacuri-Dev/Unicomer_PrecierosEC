@@ -7,11 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Context.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AdoNetCore.AseClient" Version="0.19.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.32" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PrecierosEC.Core\PrecierosEC.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>
