@@ -34,7 +34,7 @@ namespace PrecierosEC.Core.Service
             command.Parameters.Add(new AseParameter("@Message", AseDbType.VarChar) { Value = error.Message.Replace("'", "\"") });
             command.Parameters.Add(new AseParameter("@AdditionalInformation", AseDbType.VarChar) { Value = Conversions.NothingToDBNULL(error.AdditionalInformation.Replace("'", "\"")) });
             command.Parameters.Add(new AseParameter("@TrackingCode", AseDbType.VarChar) { Value = Conversions.NothingToDBNULL(error.CodigoSeguimiento.Replace("'", "\"")) });
-
+                
             command.ExecuteNonQuery();
         }
 

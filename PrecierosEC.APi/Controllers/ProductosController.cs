@@ -8,69 +8,69 @@ namespace PrecierosEC.APi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductosController : ControllerBase
+    public class ProductosController : BaseController
     {
         private readonly IPrecierosService PrecierosService;
         ResponseData ResponseData;
 
-        public ProductosController(IPrecierosService _PrecierosService )//, IServiceErrorLog _ServiceErrorLog) //:base(_ServiceErrorLog)
+        public ProductosController(IPrecierosService _PrecierosService , IServiceErrorLog _ServiceErrorLog) :base(_ServiceErrorLog)
         {
             PrecierosService = _PrecierosService;
         }
 
-        [HttpPost("QueryCambioPrecio")]
+        [HttpPost("CambioPrecioQuery")]
         public async Task<IActionResult> QueryCambioPrecio(CambioPrecioRequest body)
         {
             var model = new CambioPrecio();
             var Response = new Response<CambioPrecio>();
             try
-            {
-                model= await PrecierosService.QueryCambioPrecio(body);
+            {                                      
+                model= await PrecierosService.CambioPrecioQuery(body);
                 Response = ResponseData.GetResponse<CambioPrecio>("OK",model);
                 return Ok(Response);
             }
             catch (Exception ex)
             {
-                var Mensaje = "";// this.SaveErrorLog(ex)?.Mensaje;
+                var Mensaje =  this.SaveErrorLog(ex)?.Mensaje;
                 Response = ResponseData.GetResponse<CambioPrecio>(Mensaje, model,false);
                 return BadRequest(Response);
             }
         }
         
         
-        [HttpPost("QueryItemService")]
-        public async Task<IActionResult> QueryItemService(ItemServiceRequest body)
+        [HttpPost("ItemServiceQuery")]
+        public async Task<IActionResult> ItemServiceQuery(ItemServiceRequest body)
         {
             var model = new ItemService();
             var Response = new Response<ItemService>();
             try
             {
-                model= await PrecierosService.QueryItemService(body);
+                model= await PrecierosService.ItemServiceQuery(body);
                 Response = ResponseData.GetResponse<ItemService>("OK", model);
                 return Ok(Response);
             }
             catch (Exception ex)
             {
-                var Mensaje = "";// this.SaveErrorLog(ex)?.Mensaje;
+                var Mensaje = this.SaveErrorLog(ex)?.Mensaje;
                 Response = ResponseData.GetResponse<ItemService>(Mensaje, model, false);
                 return BadRequest(Response);
             }
         }
         
-        [HttpPost("QueryPlanCredito")]
-        public async Task<IActionResult> QueryPlanCredito(PlanCreditoRequest body)
+        [HttpPost("PlanCreditoQuery")]
+        public async Task<IActionResult> PlanCreditoQuery(PlanCreditoRequest body)
         {
             var model = new PlanCredito();
             var Response = new Response<PlanCredito>();
             try
             {
-                model= await PrecierosService.QueryPlanCredito(body);
+                model= await PrecierosService.PlanCreditoQuery(body);
                 Response = ResponseData.GetResponse<PlanCredito>("OK", model);
                 return Ok(Response);
             }
             catch (Exception ex)
             {
-                var Mensaje = "";// this.SaveErrorLog(ex)?.Mensaje;
+                var Mensaje =  this.SaveErrorLog(ex)?.Mensaje;
                 Response = ResponseData.GetResponse<PlanCredito>(Mensaje, model, false);
                 return BadRequest(Response);
             }

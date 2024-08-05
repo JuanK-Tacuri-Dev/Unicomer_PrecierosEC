@@ -2,10 +2,19 @@
 {
     public class PlanCredito
     {
-        public Creditplan[] creditPlan { get; set; }
+        public PlanCredito()
+        {
+            this.creditPlan = new List<Creditplan>();
+        }
+        public List<Creditplan> creditPlan { get; set; }
     }
     public class Creditplan
     {
+        public Creditplan()
+        {
+            this.installmentDetail = new List<Installmentdetail>();
+            this.location = new Location();
+        }
         public string countryISOCode { get; set; }
         public string planName { get; set; }
         public Location location { get; set; }
@@ -16,7 +25,7 @@
         public int minimunDepositAmount { get; set; }
         public int minimunDepositPercent { get; set; }
         public int paymentHoliday { get; set; }
-        public Installmentdetail[] installmentDetail { get; set; }
+        public List<Installmentdetail> installmentDetail { get; set; }
     }
 
     public class Location
@@ -27,8 +36,12 @@
 
     public class Installmentdetail
     {
+        public Installmentdetail()
+        {
+            this.installmentRange = new List<Installmentrange>();
+        }
         public int numberInstallment { get; set; }
-        public Installmentrange[] installmentRange { get; set; }
+        public List<Installmentrange> installmentRange { get; set; }
     }
 
     public class Installmentrange

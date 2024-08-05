@@ -2,10 +2,18 @@
 {
     public class CambioPrecio
     {
-        public Producto[] Producto { get; set; }
+        public CambioPrecio()
+        {
+            this.Producto = new List<Producto>(); 
+        }
+        public List<Producto> Producto { get; set; }
     }
     public class Producto
     {
+        public Producto()
+        {
+            this.garantias = new List<Garantia>();
+        }
         public string storeCode { get; set; }
         public string onHand { get; set; }
         public string upc { get; set; }
@@ -29,7 +37,7 @@
         public string classCode { get; set; }
         public string classDesc { get; set; }
         public string skuType { get; set; }
-        public Garantia[] garantias { get; set; }
+        public List<Garantia> garantias { get; set; }
     }
 
     public class Garantia

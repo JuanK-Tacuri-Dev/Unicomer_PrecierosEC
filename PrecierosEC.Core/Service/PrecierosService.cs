@@ -13,19 +13,10 @@ namespace PrecierosEC.Core.Service
             UnitOfWork = _UnitOfWork;
         }
 
+        public async Task<CambioPrecio> CambioPrecioQuery(CambioPrecioRequest model) => await UnitOfWork.CambioPrecioQuery(model);
+        public async Task<ItemService> ItemServiceQuery(ItemServiceRequest model) => await UnitOfWork.ItemServiceQuery(model);
+        public async Task<PlanCredito> PlanCreditoQuery(PlanCreditoRequest model) => await UnitOfWork.PlanCreditoQuery(model);
 
-        public async Task<CambioPrecio> QueryCambioPrecio(CambioPrecioRequest model)
-        {
-            return new CambioPrecio();
-        }
-        public async Task<ItemService> QueryItemService(ItemServiceRequest model)
-        {
-            return new ItemService();
-        }
-        public async Task<PlanCredito> QueryPlanCredito(PlanCreditoRequest model)
-        {
-            return new PlanCredito();
-        }
 
     }
 }

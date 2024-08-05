@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AdoNetCore.AseClient" Version="0.19.2" />
+    <PackageReference Include="Dapper.Extensions.ODBC" Version="5.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.32" />
   </ItemGroup>
 

@@ -26,6 +26,8 @@ namespace PrecierosEC.Core.Utiliies
             AppConfiguration.ApiData = settings.ErrorLogSource.ApiData;
             AppConfiguration.NonUserLog = settings.ErrorLogSource.NonUserLog;
             AppConfiguration.Custom = settings.ErrorLogSource.Custom;
+            AppConfiguration.ConnectionString = ConcectionString(settings.Credentials.ConectionDatabase);
+            AppConfiguration.ConnectionLogsString = ConcectionString(settings.LOG.ConectionDatabase);
 
 
             //DatabaseCredential Credential;
@@ -95,7 +97,7 @@ namespace PrecierosEC.Core.Utiliies
 
             //                    };
 
-            //                    AppConfiguration.ConnectionLogsString = SqlServerConnectionConstructor.Build(Credential);
+              //             AppConfiguration.ConnectionLogsString = SqlServerConnectionConstructor.Build(Credential);
             //                    break;
 
             //                default: throw new Exception("Destino de conexió no reconocido: " + DestinocredentialLog);
@@ -147,5 +149,9 @@ namespace PrecierosEC.Core.Utiliies
 
         }
 
+        public static string ConcectionString(string Conectionstring)
+        { 
+            return DbConnectionHelper.fnDesencripta(Conectionstring);
+        }
     }
 }

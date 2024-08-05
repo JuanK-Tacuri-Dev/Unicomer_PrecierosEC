@@ -16,46 +16,16 @@ namespace PrecierosEC.Core.Utiliies
 
     public class Credentials
     {
-        public bool Habilitar { get; set; }
-        public int DefaultConexion { get; set; }
-        public int Destino { get; set; }
-        public Conectiondatabase ConectionDatabase { get; set; }
-    }
-
-    public class Conectiondatabase
-    {
-        public string Server { get; set; }
-        public string Database { get; set; }
-        public string User { get; set; }
-        public string Pwd { get; set; }
-        public string Port { get; set; }
+        public string ConectionDatabase { get; set; }
+       
     }
 
     public class LOG
     {
-        public bool Habilitar { get; set; }
-        public Database DataBase { get; set; }
+        public string ConectionDatabase { get; set; }
     }
 
-    public class Database
-    {
-        public Credentials1 Credentials { get; set; }
-    }
 
-    public class Credentials1
-    {
-        public Conectiondatabase1 ConectionDatabase { get; set; }
-    }
-
-    public class Conectiondatabase1
-    {
-        public string Provider { get; set; }
-        public string Server { get; set; }
-        public string Database { get; set; }
-        public string User { get; set; }
-        public string Pwd { get; set; }
-        public string Port { get; set; }
-    }
 
     public class Errorlogsource
     {
@@ -82,5 +52,7 @@ namespace PrecierosEC.Core.Utiliies
     }
 
 }
+
+
 
 

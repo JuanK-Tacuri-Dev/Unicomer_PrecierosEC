@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NLog;
+using System.Data;
 using System.Diagnostics;
-using System.Globalization;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace PrecierosEC.Core.Utiliies
 {
@@ -67,6 +68,67 @@ namespace PrecierosEC.Core.Utiliies
             var errorLog = Conversions.DBNullToString(Conversions.ExceptionToString(ex)).Replace(Environment.NewLine, " ");
 
             return errorLog;
+        }
+
+        public static List<T> Serialize_DataReader_To_string<T>(IDataReader reader)
+        {
+
+            var dataTable = new DataTable();
+            var ModelReturn = new List<T>();
+            dataTable.Load(reader);
+            if (dataTable.Rows.Count > 0)
+                ModelReturn = JsonConvert.DeserializeObject<List<T>>(JsonConvert.SerializeObject(dataTable));
+
+            return ModelReturn;
+        }
+
+        public static string ConvertJsonToXml(string jsonString)
+        {
+            var jsonToken = JsonConvert.DeserializeObject<JToken>(jsonString);
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml("<root></root>");
+
+            CreateXmlNodes(xmlDoc.DocumentElement, "element", jsonToken);
+
+            return xmlDoc.OuterXml;
+        }
+        public static void CreateXmlNodes(XmlNode parentNode, string nodeName, JToken token)
+        {
+            if (token is JValue)
+            {
+                XmlElement element = parentNode.OwnerDocument.CreateElement(nodeName);
+                element.InnerText = token.ToString();
+                parentNode.AppendChild(element);
+            }
+            else if (token is JObject)
+            {
+                XmlElement objectElement = parentNode.OwnerDocument.CreateElement(nodeName);
+                parentNode.AppendChild(objectElement);
+
+                foreach (var property in ((JObject)token).Properties())
+                {
+                    CreateXmlNodes(objectElement, property.Name, property.Value);
+                }
+            }
+            else if (token is JArray array)
+            {
+                foreach (var item in array)
+                {
+                    CreateXmlNodes(parentNode, nodeName, item);
+                }
+            }
+        }
+
+
+        public static string ConvertObjectToXml<T>(T model)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                serializer.Serialize(stringWriter, model);
+                return  stringWriter.ToString();
+            }
         }
     }
 

@@ -2,17 +2,31 @@
 {
     public class ItemService
     {
+        public ItemService()
+        {
+            this.product = new Product();
+        }
         public Product product { get; set; }
     }
 
     public class Product
     {
+        public Product()
+        {
+            this.item = new Item();
+        }
         public Item item { get; set; }
         public string id { get; set; }
     }
 
     public class Item
     {
+        public Item()
+        {
+            this.aggregatedItem = new List<Aggregateditem>();
+            this.location = new LocationItemService();
+            this.itemSellingPrices = new Itemsellingprices();
+        }
         public string departmentName { get; set; }
         public string brandName { get; set; }
         public string itemType { get; set; }
@@ -21,7 +35,7 @@
         public string description { get; set; }
         public string fullDescription { get; set; }
         public object skuType { get; set; }
-        public Aggregateditem[] aggregatedItem { get; set; }
+        public List<Aggregateditem> aggregatedItem { get; set; }
         public string productCategory { get; set; }
         public int warrantyDuration { get; set; }
         public string modelName { get; set; }
@@ -49,6 +63,11 @@
 
     public class Aggregateditem
     {
+        public Aggregateditem()
+        {
+            this.itemAttributes = new Itemattributes();
+            this.itemSellingPrices = new Itemsellingprices1();
+        }
         public string modelName { get; set; }
         public string brandName { get; set; }
         public string itemType { get; set; }
@@ -65,6 +84,10 @@
 
     public class Itemattributes
     {
+        public Itemattributes()
+        {
+            this.stockItemAttributes = new Stockitemattributes();
+        }
         public string stockItemType { get; set; }
         public Stockitemattributes stockItemAttributes { get; set; }
     }
