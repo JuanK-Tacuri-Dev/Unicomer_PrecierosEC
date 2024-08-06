@@ -2,6 +2,7 @@
 using PrecierosEC.Core.Interface.Service;
 using PrecierosEC.Core.Models;
 using PrecierosEC.Core.Utiliies;
+using System.Text.RegularExpressions;
 
 namespace PrecierosEC.Core.Extensions
 {
@@ -15,7 +16,9 @@ namespace PrecierosEC.Core.Extensions
         protected Response<string> SaveErrorLog(Exception ex)
         {
             var Codigo = ServiceErrorLog.SaveErrorlog(ex);
-            return ResponseData.GetResponse<string>(false, string.Format(MensaggeErrorLog.ErrorGeneral, Codigo));
+            return ResponseData.GetResponse<string>(string.Format(MensaggeErrorLog.ErrorGeneral, Codigo), false);
         }
+
+        
     }
 }

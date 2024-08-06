@@ -5,9 +5,9 @@ namespace PrecierosEC.Core.Interface.Service
 {
     public interface IPrecierosService
     {
-        Task<CambioPrecio> CambioPrecioQuery(CambioPrecioRequest model);
-        Task<ItemService> ItemServiceQuery(ItemServiceRequest model);
-        Task<PlanCredito> PlanCreditoQuery(PlanCreditoRequest model);
-        
+        CambioPrecio CambioPrecioQuery(CambioPrecioRequest model, ref string mensaje);
+        ItemService ItemServiceQuery(ItemServiceRequest model, ref string mensaje);
+        PlanCredito PlanCreditoQuery(PlanCreditoRequest model, ref string mensaje);
+
     }
 }

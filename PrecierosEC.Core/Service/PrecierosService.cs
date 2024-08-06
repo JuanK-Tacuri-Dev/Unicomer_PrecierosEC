@@ -13,9 +13,9 @@ namespace PrecierosEC.Core.Service
             UnitOfWork = _UnitOfWork;
         }
 
-        public async Task<CambioPrecio> CambioPrecioQuery(CambioPrecioRequest model) => await UnitOfWork.CambioPrecioQuery(model);
-        public async Task<ItemService> ItemServiceQuery(ItemServiceRequest model) => await UnitOfWork.ItemServiceQuery(model);
-        public async Task<PlanCredito> PlanCreditoQuery(PlanCreditoRequest model) => await UnitOfWork.PlanCreditoQuery(model);
+        public CambioPrecio CambioPrecioQuery(CambioPrecioRequest model, ref string mensaje) =>  UnitOfWork.CambioPrecioQuery(model,ref mensaje);
+        public ItemService ItemServiceQuery(ItemServiceRequest model, ref string mensaje) =>  UnitOfWork.ItemServiceQuery(model, ref mensaje);
+        public PlanCredito PlanCreditoQuery(PlanCreditoRequest model, ref string mensaje) =>  UnitOfWork.PlanCreditoQuery(model, ref mensaje);
 
 
     }

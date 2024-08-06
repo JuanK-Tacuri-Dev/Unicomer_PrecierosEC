@@ -15,7 +15,7 @@ namespace PrecierosEC.Core.Models
 
     public class ResponseData
     {
-        public static Response<T> GetResponse<T>( string mensaje, T info, bool exito = true)
+        public static Response<T> GetResponse<T>(  T info, string mensaje="OK", bool exito = true)
         {
             return new Response<T>
             {
@@ -25,13 +25,21 @@ namespace PrecierosEC.Core.Models
             };
         }
 
-        public static Response<T> GetResponse<T>(bool exito, string mensaje)
+        public static Response<T> GetResponse<T>(string mensaje, bool exito = true)
         {
             return new Response<T>
             {
                 Mensaje = mensaje,
                 Exito = exito
             };
+        }
+        public static Response<T> GetResponse<T>(string mensaje)
+        {
+            return new Response<T>
+            {
+                Mensaje = mensaje,
+                Exito = string.IsNullOrEmpty(mensaje) 
+        };
         }
         public static Response<T> GetResponseT<T>(T info)
         {

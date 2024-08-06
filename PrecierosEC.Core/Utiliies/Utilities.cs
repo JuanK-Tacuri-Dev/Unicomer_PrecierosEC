@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using System.Data;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -82,6 +83,23 @@ namespace PrecierosEC.Core.Utiliies
             return ModelReturn;
         }
 
+        public static List<T> Serialize_DataTable_To_Object<T>(DataTable dataTable)
+        {
+            var resultList = new List<T>();
+            if (dataTable.Rows.Count > 0)
+            {
+                resultList = JsonConvert.DeserializeObject<List<T>>(JsonConvert.SerializeObject(dataTable));
+            }
+            return resultList;
+        }
+
+
+        public static string ErrorDatabase(string fullMessage)
+        {
+            // Ejemplo de expresión regular para extraer el mensaje (ajusta según el formato)
+            var match = Regex.Match(fullMessage, @"RAISERROR executed: (.+)$");
+            return match.Success ? match.Groups[1].Value.Trim() : fullMessage;
+        }
         public static string ConvertJsonToXml(string jsonString)
         {
             var jsonToken = JsonConvert.DeserializeObject<JToken>(jsonString);

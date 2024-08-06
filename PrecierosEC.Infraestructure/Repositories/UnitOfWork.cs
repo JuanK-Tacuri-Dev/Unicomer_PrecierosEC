@@ -1,4 +1,4 @@
-﻿
+﻿using Azure;
 using PrecierosEC.Core.Interface.Service;
 using PrecierosEC.Core.Models;
 using PrecierosEC.Core.Models.Request;
@@ -14,121 +14,94 @@ namespace PrecierosEC.Core.Repositories
     {
         protected OdbcConnection conn;
         private string xmlinfo = "";
-        
+
+        DataSet query = new DataSet();
+
         public void SetearConexion()
         {
             conn = new OdbcConnection(AppConfiguration.ConnectionString);
-                conn.Open();
+            conn.OpenAsync();
         }
-        
+
         public void CerrarConexion()
         {
 
             if (conn is not null)
             {
                 if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close(); // cierro la conexión
-                    
-                }
+                    conn.CloseAsync();
 
-                conn.Dispose();
+                conn.DisposeAsync();
                 conn = null;
             }
 
         }
 
-      
-
-        public async Task<CambioPrecio> CambioPrecioQuery(CambioPrecioRequest model)
+        public CambioPrecio CambioPrecioQuery(CambioPrecioRequest model, ref string mensaje)
         {
-            
-
-
             this.xmlinfo = Utilities.ConvertObjectToXml<CambioPrecioRequest>(model);
 
             CambioPrecio result = new CambioPrecio();
             List<Producto> producto = new List<Producto>();
             List<Garantia> garantia = new List<Garantia>();
 
-            try
-            {
-                SetearConexion();
+            var exec = String.Format("DBA.SP_CambioPrecioQuery @xmlInfo='{0}'", this.xmlinfo);
 
-                var cmd = conn.CreateCommand();
-                var exec = String.Format("DBA.SP_CambioPrecioQuery @xmlInfo='{0}'", this.xmlinfo);
-                cmd.CommandText = exec;
-
-                using IDataReader reader = await cmd.ExecuteReaderAsync();
-                result.Producto = Utilities.Serialize_DataReader_To_string<Producto>(reader).ToList();
-
-                if (result != null)
-                    garantia = Utilities.Serialize_DataReader_To_string<Garantia>(reader).ToList();
-
-                reader.Close();
+            Execute(exec, ref mensaje);
+            if (!string.IsNullOrEmpty(mensaje))
+                return null;
 
 
-                if (result != null)
-                {
-                    result.Producto.ForEach(x => x.garantias = garantia ?? null);
-                }
+            result.Producto = Utilities.Serialize_DataTable_To_Object<Producto>(this.query.Tables[0]).ToList();
 
-            }
-            finally
-            {
-                CerrarConexion();
-            }
+            if (result != null)
+                garantia = Utilities.Serialize_DataTable_To_Object<Garantia>(this.query.Tables[1]).ToList();
+
+            result?.Producto.ForEach(x => x.garantias = garantia ?? null);
+
             return result;
         }
-        public async Task<ItemService> ItemServiceQuery(ItemServiceRequest model)
+        public ItemService ItemServiceQuery(ItemServiceRequest model, ref string mensaje)
         {
             this.xmlinfo = Utilities.ConvertObjectToXml<ItemServiceRequest>(model);
             ItemService result = new ItemService();
             //Product product = new Product();
             //Item item = new Item();
-            List<Aggregateditem> aggregatedItem = new List<Aggregateditem>();
-            LocationItemService location = new LocationItemService();
-            Itemsellingprices itemSellingPrices = new Itemsellingprices();
-            Itemattributes itemAttributes = new Itemattributes();
-            Itemsellingprices1 itemSellingPrices1 = new Itemsellingprices1();
-            Stockitemattributes stockItemAttributes = new Stockitemattributes();
+            List<Aggregateditem> aggregatedItem = new();
+            LocationItemService location = new();
+            Itemsellingprices itemSellingPrices = new();
+            Itemattributes itemAttributes = new();
+            Itemsellingprices1 itemSellingPrices1 = new();
+            Stockitemattributes stockItemAttributes = new();
 
-            try
+
+            var exec = String.Format("DBA.SP_ItemServiceQuery @xmlInfo='{0}'", this.xmlinfo);
+            Execute(exec, ref mensaje);
+            if (!string.IsNullOrEmpty(mensaje))
+                return null;
+
+
+            result.product = Utilities.Serialize_DataTable_To_Object<Product>(this.query.Tables[0]).FirstOrDefault();
+
+            if (result != null)
             {
-                SetearConexion();
-                var cmd = conn.CreateCommand();
-                var exec = String.Format("DBA.SP_ItemServiceQuery @xmlInfo='{0}'", this.xmlinfo);
-                cmd.CommandText = exec;
+                result.product.item = Utilities.Serialize_DataTable_To_Object<Item>(this.query.Tables[1]).FirstOrDefault();
 
-                using IDataReader reader = await cmd.ExecuteReaderAsync();
-                result.product = Utilities.Serialize_DataReader_To_string<Product>(reader).FirstOrDefault();
+                aggregatedItem = Utilities.Serialize_DataTable_To_Object<Aggregateditem>(this.query.Tables[2]).ToList();
 
-                if (result != null)
-                {
-                    result.product.item = Utilities.Serialize_DataReader_To_string<Item>(reader).FirstOrDefault();
+                location = Utilities.Serialize_DataTable_To_Object<LocationItemService>(this.query.Tables[3]).FirstOrDefault();
 
-                    aggregatedItem = Utilities.Serialize_DataReader_To_string<Aggregateditem>(reader).ToList();
+                itemSellingPrices = Utilities.Serialize_DataTable_To_Object<Itemsellingprices>(this.query.Tables[4]).FirstOrDefault();
 
-                    location = Utilities.Serialize_DataReader_To_string<LocationItemService>(reader).FirstOrDefault();
+                itemAttributes = Utilities.Serialize_DataTable_To_Object<Itemattributes>(this.query.Tables[5]).FirstOrDefault();
 
-                    itemSellingPrices = Utilities.Serialize_DataReader_To_string<Itemsellingprices>(reader).FirstOrDefault();
+                itemSellingPrices1 = Utilities.Serialize_DataTable_To_Object<Itemsellingprices1>(this.query.Tables[6]).FirstOrDefault();
 
-                    itemAttributes = Utilities.Serialize_DataReader_To_string<Itemattributes>(reader).FirstOrDefault();
-
-                    itemSellingPrices1 = Utilities.Serialize_DataReader_To_string<Itemsellingprices1>(reader).FirstOrDefault();
-
-                    stockItemAttributes = Utilities.Serialize_DataReader_To_string<Stockitemattributes>(reader).FirstOrDefault();
-                }
-                reader.Close();
-
-            }
-            finally
-            {
-                CerrarConexion();
+                stockItemAttributes = Utilities.Serialize_DataTable_To_Object<Stockitemattributes>(this.query.Tables[7]).FirstOrDefault();
             }
             return result;
         }
-        public async Task<PlanCredito> PlanCreditoQuery(PlanCreditoRequest model)
+        public PlanCredito PlanCreditoQuery(PlanCreditoRequest model, ref string mensaje)
         {
             this.xmlinfo = Utilities.ConvertObjectToXml<PlanCreditoRequest>(model);
             PlanCredito result = new PlanCredito();
@@ -137,35 +110,56 @@ namespace PrecierosEC.Core.Repositories
             Location location = new Location();
             List<Installmentrange> installmentRange = new List<Installmentrange>();
 
+
+            var exec = String.Format("DBA.SP_PlanCreditoQuery @xmlInfo='{0}'", this.xmlinfo);
+            Execute(exec, ref mensaje);
+
+            if (!string.IsNullOrEmpty(mensaje))
+                return null;
+
+            result.creditPlan = Utilities.Serialize_DataTable_To_Object<Creditplan>(this.query.Tables[0]).ToList();
+
+            if (result != null)
+            {
+                installmentDetail = Utilities.Serialize_DataTable_To_Object<Installmentdetail>(this.query.Tables[1]).ToList();
+
+                location = Utilities.Serialize_DataTable_To_Object<Location>(this.query.Tables[2]).FirstOrDefault();
+
+                installmentRange = Utilities.Serialize_DataTable_To_Object<Installmentrange>(this.query.Tables[3]).ToList();
+            }
+
+            return result;
+        }
+
+
+        private void Execute(string command, ref string mensaje)
+        {
             try
             {
                 SetearConexion();
                 var cmd = conn.CreateCommand();
-                var exec = String.Format("DBA.SP_PlanCreditoQuery @xmlInfo='{0}'", this.xmlinfo);
-                cmd.CommandText = exec;
-
-                using IDataReader reader = await cmd.ExecuteReaderAsync();
-                result.creditPlan = Utilities.Serialize_DataReader_To_string<Creditplan>(reader).ToList();
-
-                if (result != null)
+                cmd.CommandText = command;
+                OdbcDataAdapter da = new OdbcDataAdapter(cmd);
+                da.Fill(this.query);
+            }
+            catch (OdbcException ex)
+            {
+                foreach (OdbcError error in ex.Errors)
                 {
-                    installmentDetail = Utilities.Serialize_DataReader_To_string<Installmentdetail>(reader).ToList();
-
-                    location = Utilities.Serialize_DataReader_To_string<Location>(reader).FirstOrDefault();
-
-                    installmentRange = Utilities.Serialize_DataReader_To_string<Installmentrange>(reader).ToList();
+                    if (error.SQLState == "HY000" && error.NativeError == -99999)
+                    {
+                        mensaje = Utilities.ErrorDatabase(error.Message);
+                        break;
+                    }
+                    else
+                        throw;
                 }
-                reader.Close();
-
             }
             finally
             {
                 CerrarConexion();
             }
-            return result;
         }
-
-
 
     }
 }

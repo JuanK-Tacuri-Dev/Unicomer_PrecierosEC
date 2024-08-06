@@ -12,70 +12,70 @@ namespace PrecierosEC.APi.Controllers
     {
         private readonly IPrecierosService PrecierosService;
         ResponseData ResponseData;
+        private string mensaje = "";
 
-        public ProductosController(IPrecierosService _PrecierosService , IServiceErrorLog _ServiceErrorLog) :base(_ServiceErrorLog)
+        public ProductosController(IPrecierosService _PrecierosService, IServiceErrorLog _ServiceErrorLog) : base(_ServiceErrorLog)
         {
             PrecierosService = _PrecierosService;
         }
 
         [HttpPost("CambioPrecioQuery")]
-        public async Task<IActionResult> QueryCambioPrecio(CambioPrecioRequest body)
+        public IActionResult QueryCambioPrecio(CambioPrecioRequest body)
         {
-            var model = new CambioPrecio();
+
             var Response = new Response<CambioPrecio>();
             try
-            {                                      
-                model= await PrecierosService.CambioPrecioQuery(body);
-                Response = ResponseData.GetResponse<CambioPrecio>("OK",model);
-                return Ok(Response);
-            }
-            catch (Exception ex)
             {
-                var Mensaje =  this.SaveErrorLog(ex)?.Mensaje;
-                Response = ResponseData.GetResponse<CambioPrecio>(Mensaje, model,false);
-                return BadRequest(Response);
-            }
-        }
-        
-        
-        [HttpPost("ItemServiceQuery")]
-        public async Task<IActionResult> ItemServiceQuery(ItemServiceRequest body)
-        {
-            var model = new ItemService();
-            var Response = new Response<ItemService>();
-            try
-            {
-                model= await PrecierosService.ItemServiceQuery(body);
-                Response = ResponseData.GetResponse<ItemService>("OK", model);
-                return Ok(Response);
+                var model = PrecierosService.CambioPrecioQuery(body, ref mensaje);
+                Response = ResponseData.GetResponse<CambioPrecio>(model, mensaje, string.IsNullOrEmpty(mensaje));
+                return string.IsNullOrEmpty(mensaje) ? Ok(Response) : BadRequest(Response);
             }
             catch (Exception ex)
             {
                 var Mensaje = this.SaveErrorLog(ex)?.Mensaje;
-                Response = ResponseData.GetResponse<ItemService>(Mensaje, model, false);
-                return BadRequest(Response);
-            }
-        }
-        
-        [HttpPost("PlanCreditoQuery")]
-        public async Task<IActionResult> PlanCreditoQuery(PlanCreditoRequest body)
-        {
-            var model = new PlanCredito();
-            var Response = new Response<PlanCredito>();
-            try
-            {
-                model= await PrecierosService.PlanCreditoQuery(body);
-                Response = ResponseData.GetResponse<PlanCredito>("OK", model);
-                return Ok(Response);
-            }
-            catch (Exception ex)
-            {
-                var Mensaje =  this.SaveErrorLog(ex)?.Mensaje;
-                Response = ResponseData.GetResponse<PlanCredito>(Mensaje, model, false);
+                Response = ResponseData.GetResponse<CambioPrecio>(Mensaje, false);
                 return BadRequest(Response);
             }
         }
 
-        
+
+        [HttpPost("ItemServiceQuery")]
+        public IActionResult ItemServiceQuery(ItemServiceRequest body)
+        {
+            var Response = new Response<ItemService>();
+            try
+            {
+                var model = PrecierosService.ItemServiceQuery(body, ref mensaje);
+                Response = ResponseData.GetResponse<ItemService>(model, mensaje, string.IsNullOrEmpty(mensaje));
+                return string.IsNullOrEmpty(mensaje) ? Ok(Response) : BadRequest(Response);
+            }
+            catch (Exception ex)
+            {
+                var Mensaje = this.SaveErrorLog(ex)?.Mensaje;
+                Response = ResponseData.GetResponse<ItemService>(Mensaje, false);
+                return BadRequest(Response);
+            }
+        }
+
+        [HttpPost("PlanCreditoQuery")]
+        public IActionResult PlanCreditoQuery(PlanCreditoRequest body)
+        {
+
+            var Response = new Response<PlanCredito>();
+            try
+            {
+                var model = PrecierosService.PlanCreditoQuery(body, ref mensaje);
+                Response = ResponseData.GetResponse<PlanCredito>(model, mensaje, string.IsNullOrEmpty(mensaje));
+                return string.IsNullOrEmpty(mensaje) ? Ok(Response) : BadRequest(Response);
+            }
+            catch (Exception ex)
+            {
+                var Mensaje = this.SaveErrorLog(ex)?.Mensaje;
+                Response = ResponseData.GetResponse<PlanCredito>(Mensaje, false);
+                return BadRequest(Response);
+            }
+        }
+
+
     }
 }
