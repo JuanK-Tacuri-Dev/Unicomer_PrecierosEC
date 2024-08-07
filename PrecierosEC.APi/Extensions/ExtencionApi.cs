@@ -1,4 +1,5 @@
-﻿using PrecierosEC.Core.Interface.Service;
+﻿using PrecierosEC.Core.Extensions;
+using PrecierosEC.Core.Interface.Service;
 using PrecierosEC.Core.Repositories;
 using PrecierosEC.Core.Service;
 

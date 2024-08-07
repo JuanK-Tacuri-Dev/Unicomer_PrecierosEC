@@ -26,15 +26,14 @@ namespace PrecierosEC.Core.Service
         {
             string cmd = "[sec].[spErrorInsert_Code]";
 
-            using AseCommand command = new AseCommand(cmd, Connection);
+            using AseCommand command = new(cmd, Connection);
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.Add(new AseParameter("@LogonName", AseDbType.VarChar) { Value = error.LogonName.Replace("'", "\"") });
             command.Parameters.Add(new AseParameter("@AppSource", AseDbType.VarChar) { Value = error.ApplicationSource.Replace("'", "\"") });
             command.Parameters.Add(new AseParameter("@Message", AseDbType.VarChar) { Value = error.Message.Replace("'", "\"") });
             command.Parameters.Add(new AseParameter("@AdditionalInformation", AseDbType.VarChar) { Value = Conversions.NothingToDBNULL(error.AdditionalInformation.Replace("'", "\"")) });
-            command.Parameters.Add(new AseParameter("@TrackingCode", AseDbType.VarChar) { Value = Conversions.NothingToDBNULL(error.CodigoSeguimiento.Replace("'", "\"")) });
-                
+            command.Parameters.Add(new AseParameter("@TrackingCode", AseDbType.VarChar) { Value = Conversions.NothingToDBNULL(error.CodigoSeguimiento.Replace("'", "\"")) });     
             command.ExecuteNonQuery();
         }
 
@@ -44,7 +43,7 @@ namespace PrecierosEC.Core.Service
             var CodigoSeguimiento = "";
             string Mensaje = Utilities.GenerateLineLog(Exception, ref CodigoSeguimiento);
 
-            SaveErrorlog(new ErrorLogModel(AppConfiguration.ApiData, Exception, MessageType.Error, Mensaje, Exception.StackTrace, AppConfiguration.NonUserLog, CodigoSeguimiento));
+            //SaveErrorlog(new ErrorLogModel(AppConfiguration.ApiData, Exception, MessageType.Error, Mensaje, Exception.StackTrace, AppConfiguration.NonUserLog, CodigoSeguimiento));
 
             return CodigoSeguimiento;
         }

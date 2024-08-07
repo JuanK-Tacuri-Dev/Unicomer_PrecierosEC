@@ -7,13 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCorsProgram();
 builder.Services.SetAppsetings(builder.Configuration);
 builder.Services.AddDependecyInjections(builder.Configuration);
-
-//builder.Services.AddDbContext<Context>(options =>
-//    options.UseAse(optionsBuilder =>
-        //optionsBuilder.UseConnectionString("your-connection-string-here")));
 builder.Services.AddScoped<IPrecierosService, PrecierosService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.SwaggerGen();
+
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -26,6 +23,9 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     });
 }
 
+string logFilePath = "audit-log.txt";
+
+app.UseMiddleware<AuditMiddleware>(logFilePath);
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();

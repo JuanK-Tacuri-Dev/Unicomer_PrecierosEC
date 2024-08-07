@@ -37,13 +37,84 @@ namespace PrecierosEC.Core.Repositories
 
         }
 
+        public ItemService ItemServiceQuery(ItemServiceRequest model, ref string mensaje)
+        {
+            this.xmlinfo = Utilities.ConvertObjectToXml<ItemServiceRequest>(model);
+            ItemService result = new ItemService();
+            Itemattributes itemAttributes = new();
+            Itemsellingprices1 itemSellingPrices1 = new();
+
+
+            var exec = String.Format("DBA.SP_ItemServiceQuery @xmlInfo='{0}'", this.xmlinfo);
+            Execute(exec, ref mensaje);
+            if (!string.IsNullOrEmpty(mensaje))
+                return null;
+
+
+            result.product = Utilities.Serialize_DataTable_To_Object<Product>(this.query.Tables[0]).FirstOrDefault();
+
+            if (result != null && !string.IsNullOrEmpty(result?.product?.id ?? ""))
+            {
+                result.product.item = Utilities.Serialize_DataTable_To_Object<Item>(this.query.Tables[1]).FirstOrDefault();
+
+                result.product.item.location = Utilities.Serialize_DataTable_To_Object<LocationItemService>(this.query.Tables[2]).FirstOrDefault();
+
+                result.product.item.itemSellingPrices = Utilities.Serialize_DataTable_To_Object<Itemsellingprices>(this.query.Tables[3]).FirstOrDefault();
+
+                result.product.item.aggregatedItem = Utilities.Serialize_DataTable_To_Object<Aggregateditem>(this.query.Tables[4]).ToList();
+
+                if (result.product?.item?.aggregatedItem != null)
+                {   
+                    itemSellingPrices1 = Utilities.Serialize_DataTable_To_Object<Itemsellingprices1>(this.query.Tables[5]).FirstOrDefault();
+                    itemAttributes = Utilities.Serialize_DataTable_To_Object<Itemattributes>(this.query.Tables[6]).FirstOrDefault();
+
+                    if (itemAttributes != null)
+                        itemAttributes.stockItemAttributes = Utilities.Serialize_DataTable_To_Object<Stockitemattributes>(this.query.Tables[7]).FirstOrDefault();
+
+                    result.product?.item?.aggregatedItem.ForEach(x => x.itemSellingPrices = itemSellingPrices1);
+                    result.product?.item?.aggregatedItem.ForEach(x => x.itemAttributes = itemAttributes);
+                }
+            }
+            return result;
+        }
+        public PlanCredito PlanCreditoQuery(PlanCreditoRequest model, ref string mensaje)
+        {
+            this.xmlinfo = Utilities.ConvertObjectToXml<PlanCreditoRequest>(model);
+            PlanCredito result = new PlanCredito();
+            Location location = new Location();
+            List<Installmentdetail> installmentDetail = new List<Installmentdetail>();           
+            List<Installmentrange> installmentRange = new List<Installmentrange>();
+
+
+            var exec = String.Format("DBA.SP_PlanCreditoQuery @xmlInfo='{0}'", this.xmlinfo);
+            Execute(exec, ref mensaje);
+
+            if (!string.IsNullOrEmpty(mensaje))
+                return null;
+
+            result.creditPlan = Utilities.Serialize_DataTable_To_Object<Creditplan>(this.query.Tables[0]).ToList();
+
+            if (result.creditPlan != null)
+            {
+                location = Utilities.Serialize_DataTable_To_Object<Location>(this.query.Tables[1]).FirstOrDefault();
+                installmentDetail = Utilities.Serialize_DataTable_To_Object<Installmentdetail>(this.query.Tables[2]).ToList();
+                if (installmentDetail != null)
+                {
+                    installmentRange = Utilities.Serialize_DataTable_To_Object<Installmentrange>(this.query.Tables[3]).ToList();
+                    installmentDetail.ForEach(x => x.installmentRange = installmentRange);
+                }
+                result.creditPlan?.ForEach(x => x.location = location);
+                result.creditPlan?.ForEach(x => x.installmentDetail = installmentDetail);
+            }
+
+            return result;
+        }
+
         public CambioPrecio CambioPrecioQuery(CambioPrecioRequest model, ref string mensaje)
         {
             this.xmlinfo = Utilities.ConvertObjectToXml<CambioPrecioRequest>(model);
-
-            CambioPrecio result = new CambioPrecio();
-            List<Producto> producto = new List<Producto>();
-            List<Garantia> garantia = new List<Garantia>();
+            CambioPrecio result = new();
+            List<Garantia> garantia = new();
 
             var exec = String.Format("DBA.SP_CambioPrecioQuery @xmlInfo='{0}'", this.xmlinfo);
 
@@ -58,75 +129,6 @@ namespace PrecierosEC.Core.Repositories
                 garantia = Utilities.Serialize_DataTable_To_Object<Garantia>(this.query.Tables[1]).ToList();
 
             result?.Producto.ForEach(x => x.garantias = garantia ?? null);
-
-            return result;
-        }
-        public ItemService ItemServiceQuery(ItemServiceRequest model, ref string mensaje)
-        {
-            this.xmlinfo = Utilities.ConvertObjectToXml<ItemServiceRequest>(model);
-            ItemService result = new ItemService();
-            //Product product = new Product();
-            //Item item = new Item();
-            List<Aggregateditem> aggregatedItem = new();
-            LocationItemService location = new();
-            Itemsellingprices itemSellingPrices = new();
-            Itemattributes itemAttributes = new();
-            Itemsellingprices1 itemSellingPrices1 = new();
-            Stockitemattributes stockItemAttributes = new();
-
-
-            var exec = String.Format("DBA.SP_ItemServiceQuery @xmlInfo='{0}'", this.xmlinfo);
-            Execute(exec, ref mensaje);
-            if (!string.IsNullOrEmpty(mensaje))
-                return null;
-
-
-            result.product = Utilities.Serialize_DataTable_To_Object<Product>(this.query.Tables[0]).FirstOrDefault();
-
-            if (result != null)
-            {
-                result.product.item = Utilities.Serialize_DataTable_To_Object<Item>(this.query.Tables[1]).FirstOrDefault();
-
-                aggregatedItem = Utilities.Serialize_DataTable_To_Object<Aggregateditem>(this.query.Tables[2]).ToList();
-
-                location = Utilities.Serialize_DataTable_To_Object<LocationItemService>(this.query.Tables[3]).FirstOrDefault();
-
-                itemSellingPrices = Utilities.Serialize_DataTable_To_Object<Itemsellingprices>(this.query.Tables[4]).FirstOrDefault();
-
-                itemAttributes = Utilities.Serialize_DataTable_To_Object<Itemattributes>(this.query.Tables[5]).FirstOrDefault();
-
-                itemSellingPrices1 = Utilities.Serialize_DataTable_To_Object<Itemsellingprices1>(this.query.Tables[6]).FirstOrDefault();
-
-                stockItemAttributes = Utilities.Serialize_DataTable_To_Object<Stockitemattributes>(this.query.Tables[7]).FirstOrDefault();
-            }
-            return result;
-        }
-        public PlanCredito PlanCreditoQuery(PlanCreditoRequest model, ref string mensaje)
-        {
-            this.xmlinfo = Utilities.ConvertObjectToXml<PlanCreditoRequest>(model);
-            PlanCredito result = new PlanCredito();
-            List<Creditplan> creditPlan = new List<Creditplan>();
-            List<Installmentdetail> installmentDetail = new List<Installmentdetail>();
-            Location location = new Location();
-            List<Installmentrange> installmentRange = new List<Installmentrange>();
-
-
-            var exec = String.Format("DBA.SP_PlanCreditoQuery @xmlInfo='{0}'", this.xmlinfo);
-            Execute(exec, ref mensaje);
-
-            if (!string.IsNullOrEmpty(mensaje))
-                return null;
-
-            result.creditPlan = Utilities.Serialize_DataTable_To_Object<Creditplan>(this.query.Tables[0]).ToList();
-
-            if (result != null)
-            {
-                installmentDetail = Utilities.Serialize_DataTable_To_Object<Installmentdetail>(this.query.Tables[1]).ToList();
-
-                location = Utilities.Serialize_DataTable_To_Object<Location>(this.query.Tables[2]).FirstOrDefault();
-
-                installmentRange = Utilities.Serialize_DataTable_To_Object<Installmentrange>(this.query.Tables[3]).ToList();
-            }
 
             return result;
         }

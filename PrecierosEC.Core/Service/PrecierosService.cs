@@ -12,10 +12,10 @@ namespace PrecierosEC.Core.Service
         {
             UnitOfWork = _UnitOfWork;
         }
-
+        public ItemService ItemServiceQuery(ItemServiceRequest model, ref string mensaje) => UnitOfWork.ItemServiceQuery(model, ref mensaje);
+        public PlanCredito PlanCreditoQuery(PlanCreditoRequest model, ref string mensaje) => UnitOfWork.PlanCreditoQuery(model, ref mensaje);
         public CambioPrecio CambioPrecioQuery(CambioPrecioRequest model, ref string mensaje) =>  UnitOfWork.CambioPrecioQuery(model,ref mensaje);
-        public ItemService ItemServiceQuery(ItemServiceRequest model, ref string mensaje) =>  UnitOfWork.ItemServiceQuery(model, ref mensaje);
-        public PlanCredito PlanCreditoQuery(PlanCreditoRequest model, ref string mensaje) =>  UnitOfWork.PlanCreditoQuery(model, ref mensaje);
+     
 
 
     }
