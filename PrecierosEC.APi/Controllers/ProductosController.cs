@@ -46,7 +46,7 @@ namespace PrecierosEC.APi.Controllers
         }
 
         [HttpPost("CambioPrecioQuery")]
-        public IActionResult QueryCambioPrecio(CambioPrecioRequest body)
+        public IActionResult CambioPrecioQuery(CambioPrecioRequest body)
         {
             try
             {
@@ -59,10 +59,6 @@ namespace PrecierosEC.APi.Controllers
                 return BadRequestResult();
             }
         }
-
-
-       
-
 
     }
 }

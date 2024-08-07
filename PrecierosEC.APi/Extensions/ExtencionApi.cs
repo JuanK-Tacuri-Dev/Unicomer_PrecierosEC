@@ -13,6 +13,7 @@ namespace PrecierosEC.APi.Extensions
             services.AddControllers();
             services.AddScoped<IServiceErrorLog, ServiceErrorLog>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
         }
     }
 }

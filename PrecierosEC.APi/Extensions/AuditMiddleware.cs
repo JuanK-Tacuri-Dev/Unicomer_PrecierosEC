@@ -57,9 +57,9 @@
                 // Guarda el log de auditoría en un archivo
                 try
                 {
-                    await WriteLogToFileAsync(auditLog);
+                    //await WriteLogToFileAsync(auditLog);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Manejo de excepciones opcional o logueo
                     throw;

@@ -15,7 +15,7 @@ namespace PrecierosEC.Core.Repositories
         protected OdbcConnection conn;
         private string xmlinfo = "";
 
-        DataSet query = new DataSet();
+        DataSet query = new();
 
         public void SetearConexion()
         {
@@ -31,7 +31,7 @@ namespace PrecierosEC.Core.Repositories
                 if (conn.State == ConnectionState.Open)
                     conn.CloseAsync();
 
-                conn.DisposeAsync();
+                 conn.DisposeAsync();
                 conn = null;
             }
 
@@ -80,10 +80,10 @@ namespace PrecierosEC.Core.Repositories
         public PlanCredito PlanCreditoQuery(PlanCreditoRequest model, ref string mensaje)
         {
             this.xmlinfo = Utilities.ConvertObjectToXml<PlanCreditoRequest>(model);
-            PlanCredito result = new PlanCredito();
-            Location location = new Location();
-            List<Installmentdetail> installmentDetail = new List<Installmentdetail>();           
-            List<Installmentrange> installmentRange = new List<Installmentrange>();
+            PlanCredito result = new();
+            Location location = new();
+            List<Installmentdetail> installmentDetail = new();
+            List<Installmentrange> installmentRange = new();
 
 
             var exec = String.Format("DBA.SP_PlanCreditoQuery @xmlInfo='{0}'", this.xmlinfo);
@@ -141,7 +141,7 @@ namespace PrecierosEC.Core.Repositories
                 SetearConexion();
                 var cmd = conn.CreateCommand();
                 cmd.CommandText = command;
-                OdbcDataAdapter da = new OdbcDataAdapter(cmd);
+                OdbcDataAdapter da = new(cmd);
                 da.Fill(this.query);
             }
             catch (OdbcException ex)

@@ -8,9 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Runtime.Versioning;
 
 namespace PrecierosEC.Core.Interface.Service
 {
+    [SupportedOSPlatform("windows")]
     public interface IUnitOfWork
     {
         CambioPrecio CambioPrecioQuery(CambioPrecioRequest model, ref string mensaje);
