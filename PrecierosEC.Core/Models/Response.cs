@@ -4,13 +4,13 @@ namespace PrecierosEC.Core.Models
 {
     public class Response<T>
     {
-
-        [JsonProperty("info")]
-        public T Info { get; set; }
         [JsonProperty("mensaje")]
         public string Mensaje { get; set; }
         [JsonProperty("exito")]
         public bool Exito { get; set; }
+        [JsonProperty("info")]
+        public T Info { get; set; }
+       
     }
 
     public class ResponseData

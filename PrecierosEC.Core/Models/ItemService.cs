@@ -1,4 +1,6 @@
-﻿namespace PrecierosEC.Core.Models
+﻿using System.Text.Json.Serialization;
+
+namespace PrecierosEC.Core.Models
 {
     public class ItemService
     {
@@ -89,6 +91,8 @@
         public int? permanentSaleUnitRetailPriceAmount { get; set; }
         public string currentSaleUnitRetailPriceTypeCode { get; set; }
         public decimal? pricepercent { get; set; }
+        [JsonIgnore]
+        public string id { get; set; }
     }
     public class Itemattributes
     {
@@ -97,11 +101,15 @@
             this.stockItemAttributes = new Stockitemattributes();
         }
         public string stockItemType { get; set; }
+        [JsonIgnore]
+        public string id { get; set; }
         public Stockitemattributes stockItemAttributes { get; set; }
     }
 
     public class Stockitemattributes
     {
+        [JsonIgnore]
+        public string id { get; set; }
         public int? warrantyDuration { get; set; }
     }
 

@@ -23,9 +23,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     });
 }
 
-string logFilePath = "audit-log.txt";
 
-app.UseMiddleware<AuditMiddleware>(logFilePath);
+app.UseMiddleware<AuditMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();

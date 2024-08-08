@@ -9,6 +9,7 @@ namespace PrecierosEC.Core.Utiliies
     public class ApiSettings
     {
         public Credentials Credentials { get; set; }
+        public Auditaplications AuditAplications { get; set; }
         public LOG LOG { get; set; }
         public Errorlogsource ErrorLogSource { get; set; }
         public Nameapi NameApi { get; set; }
@@ -17,15 +18,21 @@ namespace PrecierosEC.Core.Utiliies
     public class Credentials
     {
         public string ConectionDatabase { get; set; }
-       
+    }
+
+    public class Auditaplications
+    {
+        public string ConectionDatabase { get; set; }
+        public string RutaAuditFichero { get; set; }
+        public string RutaAuditDatabase { get; set; }
     }
 
     public class LOG
     {
         public string ConectionDatabase { get; set; }
+        public string RutaLogFichero { get; set; }
+        public string RutaLogDatabase { get; set; }
     }
-
-
 
     public class Errorlogsource
     {
@@ -50,9 +57,4 @@ namespace PrecierosEC.Core.Utiliies
         public string Email { get; set; }
         public string Url { get; set; }
     }
-
 }
-
-
-
-

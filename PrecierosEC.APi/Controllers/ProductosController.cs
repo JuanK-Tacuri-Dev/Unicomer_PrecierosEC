@@ -20,8 +20,7 @@ namespace PrecierosEC.APi.Controllers
         {
             try
             {
-                var model = PrecierosService.ItemServiceQuery(body, ref message);
-                return OkResult(model);
+                return OkResult(PrecierosService.ItemServiceQuery(body, ref message));
             }
             catch (Exception ex)
             {
@@ -35,8 +34,7 @@ namespace PrecierosEC.APi.Controllers
         {
             try
             {
-                var model = PrecierosService.PlanCreditoQuery(body, ref message);
-                return OkResult(model);
+                return OkResult(PrecierosService.PlanCreditoQuery(body, ref message));
             }
             catch (Exception ex)
             {
@@ -50,8 +48,7 @@ namespace PrecierosEC.APi.Controllers
         {
             try
             {
-                var model = PrecierosService.CambioPrecioQuery(body, ref message);
-                return OkResult(model);
+                return OkResult(PrecierosService.CambioPrecioQuery(body, ref message));
             }
             catch (Exception ex)
             {

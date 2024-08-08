@@ -41,8 +41,6 @@ namespace PrecierosEC.Core.Repositories
         {
             this.xmlinfo = Utilities.ConvertObjectToXml<ItemServiceRequest>(model);
             ItemService result = new ItemService();
-            Itemattributes itemAttributes = new();
-            Itemsellingprices1 itemSellingPrices1 = new();
 
 
             var exec = String.Format("DBA.SP_ItemServiceQuery @xmlInfo='{0}'", this.xmlinfo);
@@ -65,14 +63,16 @@ namespace PrecierosEC.Core.Repositories
 
                 if (result.product?.item?.aggregatedItem != null)
                 {   
-                    itemSellingPrices1 = Utilities.Serialize_DataTable_To_Object<Itemsellingprices1>(this.query.Tables[5]).FirstOrDefault();
-                    itemAttributes = Utilities.Serialize_DataTable_To_Object<Itemattributes>(this.query.Tables[6]).FirstOrDefault();
+                   var  itemSellingPrices1 = Utilities.Serialize_DataTable_To_Object<Itemsellingprices1>(this.query.Tables[5]).ToList();
+                   var  itemAttributes = Utilities.Serialize_DataTable_To_Object<Itemattributes>(this.query.Tables[6]).ToList();
 
                     if (itemAttributes != null)
-                        itemAttributes.stockItemAttributes = Utilities.Serialize_DataTable_To_Object<Stockitemattributes>(this.query.Tables[7]).FirstOrDefault();
-
-                    result.product?.item?.aggregatedItem.ForEach(x => x.itemSellingPrices = itemSellingPrices1);
-                    result.product?.item?.aggregatedItem.ForEach(x => x.itemAttributes = itemAttributes);
+                    {
+                        var stockItemAttributes = Utilities.Serialize_DataTable_To_Object<Stockitemattributes>(this.query.Tables[7]).ToList();
+                        itemAttributes.ForEach(x => x.stockItemAttributes = stockItemAttributes.Where(y=>y.id==x.id).FirstOrDefault());
+                    }
+                    result.product?.item?.aggregatedItem.ForEach(x => x.itemSellingPrices = itemSellingPrices1.Where(y=>y.id==x.id).FirstOrDefault());
+                    result.product?.item?.aggregatedItem.ForEach(x => x.itemAttributes = itemAttributes.Where(y => y.id == x.id).FirstOrDefault());
                 }
             }
             return result;

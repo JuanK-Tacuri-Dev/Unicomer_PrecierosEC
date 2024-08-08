@@ -29,12 +29,7 @@
             AmazonBucket = 3,
             Disk = 4,
         }
-        public enum Ambiente
-        {
-            Desarrollo = 1,
-            Calidad = 2,
-            Produccion = 3
-        }
+
 
         public enum DestinoCadenaConexion : byte
         {

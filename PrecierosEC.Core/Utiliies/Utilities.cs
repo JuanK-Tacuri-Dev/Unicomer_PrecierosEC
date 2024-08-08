@@ -116,7 +116,14 @@ namespace PrecierosEC.Core.Utiliies
             }
         }
 
+        public static string GetExcepcion(Exception ex)
+        {
+            var excesion = "" + ex.ToString() + "---------"+ Environment.NewLine;
+            if (ex.InnerException != null)
+                excesion += GetExcepcion(ex.InnerException);
 
+            return excesion;
+        }
         public static string ConvertObjectToXml<T>(T model)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(T));

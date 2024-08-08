@@ -19,11 +19,11 @@ namespace PrecierosEC.Core.Extensions
             var Codigo = ErrorLog.SaveErrorlog(ex);
             return ResponseData.GetResponse<string>(string.Format(MensaggeErrorLog.ErrorGeneral, Codigo), false);
         }
-        protected Response<T> addResponse<T>(T info, string mensaje = "OK")
+        protected Response<T> addResponse<T>(T info)
         {
             return new Response<T>
             {
-                Mensaje = mensaje,
+                Mensaje = string.IsNullOrEmpty(this.message) ? "OK" : this.message,
                 Info = info,
                 Exito = string.IsNullOrEmpty(this.message)
             };
