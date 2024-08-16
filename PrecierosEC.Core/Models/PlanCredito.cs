@@ -1,4 +1,6 @@
-﻿namespace PrecierosEC.Core.Models
+﻿using System.Text.Json.Serialization;
+
+namespace PrecierosEC.Core.Models
 {
     public class PlanCredito
     {
@@ -22,9 +24,9 @@
         public string id { get; set; }
         public string assistanceFlag { get; set; }
         public string paymentCycleID { get; set; }
-        public int minimunDepositAmount { get; set; }
-        public int minimunDepositPercent { get; set; }
-        public int paymentHoliday { get; set; }
+        public decimal minimunDepositAmount { get; set; }
+        public decimal minimunDepositPercent { get; set; }
+        public decimal paymentHoliday { get; set; }
         public Location location { get; set; }
         public List<Installmentdetail> installmentDetail { get; set; }
         
@@ -43,12 +45,16 @@
             this.installmentRange = new List<Installmentrange>();
         }
         public int numberInstallment { get; set; }
+        public decimal monthlypayment { get; set; }
+        public int planid { get; set; }
+        public string planName { get; set; }
         public List<Installmentrange> installmentRange { get; set; }
     }
-
     public class Installmentrange
     {
-        public float annualInterestRate { get; set; }
+        [JsonIgnore]
+        public int planid { get; set; }
+        public decimal annualInterestRate { get; set; }
         public int finalRange { get; set; }
         public int initialRange { get; set; }
     }

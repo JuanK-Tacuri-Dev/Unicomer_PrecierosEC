@@ -61,8 +61,6 @@ namespace PrecierosEC.Core.Utiliies
             MappedDiagnosticsLogicalContext.Set("Origen", Origen_lo);
             MappedDiagnosticsLogicalContext.Set("Linea", sf.GetFileLineNumber());
 
-            var IdCompania = Conversions.DBNullToString(MappedDiagnosticsLogicalContext.Get("IdCompania"));
-
             var Codigo = $"E{Guid.NewGuid().ToString("N").ToUpper().Substring(0, 5)}{DateTime.Now.ToString("hhmmssffffff")}";
             MappedDiagnosticsLogicalContext.Set("CodigoSeguimiento", Codigo);
             CodigoSeguimiento = MappedDiagnosticsLogicalContext.Get("CodigoSeguimiento");

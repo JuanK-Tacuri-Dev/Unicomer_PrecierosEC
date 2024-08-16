@@ -14,11 +14,8 @@ namespace PrecierosEC.Core.Extensions
         {
             ErrorLog = _ErrorLog;
         }
-        protected Response<string> SaveErrorLog(Exception ex)
-        {
-            var Codigo = ErrorLog.SaveErrorlog(ex);
-            return ResponseData.GetResponse<string>(string.Format(MensaggeErrorLog.ErrorGeneral, Codigo), false);
-        }
+        protected void SaveErrorLog(Exception ex) => this.message = string.Format(MensaggeErrorLog.ErrorGeneral,ErrorLog.SaveErrorlog(ex));
+
         protected Response<T> addResponse<T>(T info)
         {
             return new Response<T>
@@ -36,11 +33,7 @@ namespace PrecierosEC.Core.Extensions
                 Exito = string.IsNullOrEmpty(this.message)
             };  
         }
-        protected IActionResult BadRequestResult()
-        {
-            var Response = addResponse<string>();
-            return BadRequest(Response);
-        }
+        protected IActionResult BadRequestResult()=> BadRequest(addResponse<string>());
         protected IActionResult OkResult(object info)
         {
             var Response = addResponse(info);

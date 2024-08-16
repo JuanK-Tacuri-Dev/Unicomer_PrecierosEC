@@ -1,13 +1,5 @@
-﻿using PrecierosEC.Core.Models.Request;
-using PrecierosEC.Core.Models;
-using PrecierosEC.Core.Utiliies;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using PrecierosEC.Core.Models;
+using PrecierosEC.Core.Models.Request;
 using System.Runtime.Versioning;
 
 namespace PrecierosEC.Core.Interface.Service

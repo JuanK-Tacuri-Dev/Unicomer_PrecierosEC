@@ -15,30 +15,30 @@ namespace PrecierosEC.APi.Controllers
             PrecierosService = _PrecierosService;
         }
 
-        [HttpPost("ItemServiceQuery")]
-        public IActionResult ItemServiceQuery(ItemServiceRequest body)
+        [HttpGet("ItemServiceQuery")]
+        public IActionResult ItemServiceQuery(string country, string storeId, string SKU)
         {
             try
             {
-                return OkResult(PrecierosService.ItemServiceQuery(body, ref message));
+                return OkResult(PrecierosService.ItemServiceQuery(country, storeId, SKU, ref message));
             }
             catch (Exception ex)
             {
-                this.message = this.SaveErrorLog(ex)?.Mensaje;
+                this.SaveErrorLog(ex);
                 return BadRequestResult();
             }
         }
 
-        [HttpPost("PlanCreditoQuery")]
-        public IActionResult PlanCreditoQuery(PlanCreditoRequest body)
+        [HttpGet("PlanCreditoQuery")]
+        public IActionResult PlanCreditoQuery(string country, int companyId, decimal amountToFinance, int installments, decimal interestRate, int paymentCycle, int defferedPeriods, string treatment, int storeId, string sku, int warrantyid)
         {
             try
             {
-                return OkResult(PrecierosService.PlanCreditoQuery(body, ref message));
+                return OkResult(PrecierosService.PlanCreditoQuery(country, companyId, amountToFinance, installments, interestRate, paymentCycle, defferedPeriods, treatment, storeId, sku, warrantyid, ref message));
             }
             catch (Exception ex)
             {
-                this.message = this.SaveErrorLog(ex)?.Mensaje;
+                this.SaveErrorLog(ex);
                 return BadRequestResult();
             }
         }
@@ -52,10 +52,12 @@ namespace PrecierosEC.APi.Controllers
             }
             catch (Exception ex)
             {
-                this.message = this.SaveErrorLog(ex)?.Mensaje;
+                this.SaveErrorLog(ex);
                 return BadRequestResult();
             }
         }
 
     }
 }
+
+

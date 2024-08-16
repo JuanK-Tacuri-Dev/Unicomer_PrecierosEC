@@ -1,5 +1,4 @@
-﻿using Azure;
-using PrecierosEC.Core.Interface.Service;
+﻿using PrecierosEC.Core.Interface.Service;
 using PrecierosEC.Core.Models;
 using PrecierosEC.Core.Models.Request;
 using PrecierosEC.Core.Utiliies;
@@ -25,16 +24,14 @@ namespace PrecierosEC.Core.Repositories
 
         public void CerrarConexion()
         {
-
             if (conn is not null)
             {
                 if (conn.State == ConnectionState.Open)
                     conn.CloseAsync();
 
-                 conn.DisposeAsync();
+                conn.DisposeAsync();
                 conn = null;
             }
-
         }
 
         public ItemService ItemServiceQuery(ItemServiceRequest model, ref string mensaje)
@@ -62,16 +59,16 @@ namespace PrecierosEC.Core.Repositories
                 result.product.item.aggregatedItem = Utilities.Serialize_DataTable_To_Object<Aggregateditem>(this.query.Tables[4]).ToList();
 
                 if (result.product?.item?.aggregatedItem != null)
-                {   
-                   var  itemSellingPrices1 = Utilities.Serialize_DataTable_To_Object<Itemsellingprices1>(this.query.Tables[5]).ToList();
-                   var  itemAttributes = Utilities.Serialize_DataTable_To_Object<Itemattributes>(this.query.Tables[6]).ToList();
+                {
+                    var itemSellingPrices1 = Utilities.Serialize_DataTable_To_Object<Itemsellingprices1>(this.query.Tables[5]).ToList();
+                    var itemAttributes = Utilities.Serialize_DataTable_To_Object<Itemattributes>(this.query.Tables[6]).ToList();
 
                     if (itemAttributes != null)
                     {
                         var stockItemAttributes = Utilities.Serialize_DataTable_To_Object<Stockitemattributes>(this.query.Tables[7]).ToList();
-                        itemAttributes.ForEach(x => x.stockItemAttributes = stockItemAttributes.Where(y=>y.id==x.id).FirstOrDefault());
+                        itemAttributes.ForEach(x => x.stockItemAttributes = stockItemAttributes.Where(y => y.id == x.id).FirstOrDefault());
                     }
-                    result.product?.item?.aggregatedItem.ForEach(x => x.itemSellingPrices = itemSellingPrices1.Where(y=>y.id==x.id).FirstOrDefault());
+                    result.product?.item?.aggregatedItem.ForEach(x => x.itemSellingPrices = itemSellingPrices1.Where(y => y.id == x.id).FirstOrDefault());
                     result.product?.item?.aggregatedItem.ForEach(x => x.itemAttributes = itemAttributes.Where(y => y.id == x.id).FirstOrDefault());
                 }
             }
@@ -101,7 +98,7 @@ namespace PrecierosEC.Core.Repositories
                 if (installmentDetail != null)
                 {
                     installmentRange = Utilities.Serialize_DataTable_To_Object<Installmentrange>(this.query.Tables[3]).ToList();
-                    installmentDetail.ForEach(x => x.installmentRange = installmentRange);
+                    installmentDetail.ForEach(x => x.installmentRange = installmentRange.Where(y => y.planid == x.planid).ToList());
                 }
                 result.creditPlan?.ForEach(x => x.location = location);
                 result.creditPlan?.ForEach(x => x.installmentDetail = installmentDetail);
@@ -109,7 +106,6 @@ namespace PrecierosEC.Core.Repositories
 
             return result;
         }
-
         public CambioPrecio CambioPrecioQuery(CambioPrecioRequest model, ref string mensaje)
         {
             this.xmlinfo = Utilities.ConvertObjectToXml<CambioPrecioRequest>(model);
@@ -132,7 +128,6 @@ namespace PrecierosEC.Core.Repositories
 
             return result;
         }
-
 
         private void Execute(string command, ref string mensaje)
         {
