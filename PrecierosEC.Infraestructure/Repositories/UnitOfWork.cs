@@ -37,7 +37,7 @@ namespace PrecierosEC.Core.Repositories
         public ItemService ItemServiceQuery(ItemServiceRequest model, ref string mensaje)
         {
             this.xmlinfo = Utilities.ConvertObjectToXml<ItemServiceRequest>(model);
-            ItemService result = new ItemService();
+            ItemService result = new();
 
 
             var exec = String.Format("DBA.SP_ItemServiceQuery @xmlInfo='{0}'", this.xmlinfo);

@@ -22,14 +22,14 @@ namespace PrecierosEC.Core.Utiliies
 
     public class Auditaplications
     {
-        public string ConectionDatabase { get; set; }
+        public string Database { get; set; }
         public string RutaAuditFichero { get; set; }
         public string RutaAuditDatabase { get; set; }
     }
 
     public class LOG
     {
-        public string ConectionDatabase { get; set; }
+        public string Database { get; set; }
         public string RutaLogFichero { get; set; }
         public string RutaLogDatabase { get; set; }
     }

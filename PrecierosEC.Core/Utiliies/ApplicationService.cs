@@ -29,8 +29,8 @@ namespace PrecierosEC.Core.Utiliies
 
             //ConexionDatabase AND Ficheros
             AppConfiguration.ConnectionString = ConcectionString(settings.Credentials.ConectionDatabase);
-            AppConfiguration.ConnectionLogsString = ConcectionString(settings.LOG.ConectionDatabase);
-            AppConfiguration.ConnectionAuditsString = ConcectionString(settings.AuditAplications.ConectionDatabase);
+            AppConfiguration.NameDatabaseLogs = settings.LOG.Database;
+            AppConfiguration.NameDatabaseAudit = settings.AuditAplications.Database;
             
             AppConfiguration.RutaLogDatabase = settings.LOG.RutaLogDatabase;
             AppConfiguration.RutaLogFichero = settings.LOG.RutaLogFichero;

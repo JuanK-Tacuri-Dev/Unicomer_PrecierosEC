@@ -33,7 +33,7 @@ namespace PrecierosEC.Core.Models
         public string brandName { get; set; }
         public string itemType { get; set; }
         public string departmentCode { get; set; }
-        public long? upc { get; set; }
+        public string upc { get; set; }
         public string description { get; set; }
         public string fullDescription { get; set; }
         public string skuType { get; set; }
@@ -57,8 +57,8 @@ namespace PrecierosEC.Core.Models
 
     public class Itemsellingprices
     {
-        public int? permanentSaleUnitRetailPriceAmount { get; set; }
-        public DateTime? temporarySaleUnitRetailPriceExpirationDate { get; set; }
+        public decimal? permanentSaleUnitRetailPriceAmount { get; set; }
+        public string temporarySaleUnitRetailPriceExpirationDate { get; set; }
         public string currentSaleUnitRetailPriceTypeCode { get; set; }
         public string currentSaleUnitRetailPriceEffectiveDate { get; set; }
        
@@ -77,7 +77,7 @@ namespace PrecierosEC.Core.Models
         public string modelCode { get; set; }
         
         public string description { get; set; }
-        public long? upc { get; set; }
+        public string upc { get; set; }
         public string id { get; set; }
         public int? sku { get; set; }
         public string fullDescription { get; set; }
@@ -88,7 +88,7 @@ namespace PrecierosEC.Core.Models
     }
     public class Itemsellingprices1
     {
-        public int? permanentSaleUnitRetailPriceAmount { get; set; }
+        public decimal? permanentSaleUnitRetailPriceAmount { get; set; }
         public string currentSaleUnitRetailPriceTypeCode { get; set; }
         public decimal? pricepercent { get; set; }
         [JsonIgnore]

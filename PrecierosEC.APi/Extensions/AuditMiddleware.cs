@@ -12,7 +12,7 @@ namespace PrecierosEC.APi.Extensions
         public void SetearConexion()
         {
             SQLitePCL.Batteries.Init();
-            Connection = new SqliteConnection($"data source={AppConfiguration.RutaAuditDatabase}");
+            Connection = new SqliteConnection($"data source= {Path.Combine(AppConfiguration.RutaAuditDatabase, AppConfiguration.NameDatabaseAudit)}");
             Connection.Open();
         }
         public void CerrarConexion()
@@ -76,13 +76,14 @@ namespace PrecierosEC.APi.Extensions
                     ResponseDate = ResponseDate.ToString("yyyy-MM-dd HH:mm:ss"),
                     HostName = hostName,
                     HostAddress = hostAddress,
-                    StatusCode=context.Response.StatusCode,
+                    StatusCode = context.Response.StatusCode,
                     Timestamp = Timestamp.ToString()
                 };
 
 
                 try
                 {
+                    CreateDatabaseDefaultIfNotExist();
                     SaveAuditLog(auditLog);
                 }
                 catch (Exception ex)
@@ -107,25 +108,25 @@ namespace PrecierosEC.APi.Extensions
 VALUES (@HosteName, @HostAddress, @AppSource, @User, @StatusCode, @RequestDate, @RequestMetod, @RequestPath, @RequestBody, @ResponseDate, @ResponseBody, @Timestamp, @TrackingCode, @DateIng);";
 
                 using var command = new SqliteCommand(SQL, Connection);
-                
+
                 // Agregar parámetros al comando
-                command.Parameters.Add(new SqliteParameter("@HosteName",   DbType.String) { Value = audit.HostName                });
-                command.Parameters.Add(new SqliteParameter("@HostAddress", DbType.String) { Value = audit.HostAddress             });
-                command.Parameters.Add(new SqliteParameter("@AppSource",   DbType.String) { Value = AppConfiguration.ApiData      });
-                command.Parameters.Add(new SqliteParameter("@User",        DbType.String) { Value = AppConfiguration.NonUserLog   });
-                command.Parameters.Add(new SqliteParameter("@StatusCode",  DbType.Int32 ) { Value = audit.StatusCode              });
-                command.Parameters.Add(new SqliteParameter("@RequestDate", DbType.String) { Value = audit.RequestDate             });
-                command.Parameters.Add(new SqliteParameter("@RequestMetod",DbType.String) { Value = audit.RequestMethod           });
-                command.Parameters.Add(new SqliteParameter("@RequestPath", DbType.String) { Value = audit.RequestPath             });
-                command.Parameters.Add(new SqliteParameter("@RequestBody", DbType.String) { Value = audit.RequestBody             });
-                command.Parameters.Add(new SqliteParameter("@ResponseDate",DbType.String) { Value = audit.ResponseDate            });
-                command.Parameters.Add(new SqliteParameter("@ResponseBody",DbType.String) { Value = audit.ResponseBody            });
-                command.Parameters.Add(new SqliteParameter("@Timestamp",   DbType.String) { Value = audit.Timestamp               });
-                command.Parameters.Add(new SqliteParameter("@TrackingCode",DbType.String) { Value = AppConfiguration.TrackingCode });
-                command.Parameters.Add(new SqliteParameter("@DateIng",     DbType.String) { Value = DateIng                       });
+                command.Parameters.Add(new SqliteParameter("@HosteName", DbType.String) { Value = audit.HostName });
+                command.Parameters.Add(new SqliteParameter("@HostAddress", DbType.String) { Value = audit.HostAddress });
+                command.Parameters.Add(new SqliteParameter("@AppSource", DbType.String) { Value = AppConfiguration.ApiData });
+                command.Parameters.Add(new SqliteParameter("@User", DbType.String) { Value = AppConfiguration.NonUserLog });
+                command.Parameters.Add(new SqliteParameter("@StatusCode", DbType.Int32) { Value = audit.StatusCode });
+                command.Parameters.Add(new SqliteParameter("@RequestDate", DbType.String) { Value = audit.RequestDate });
+                command.Parameters.Add(new SqliteParameter("@RequestMetod", DbType.String) { Value = audit.RequestMethod });
+                command.Parameters.Add(new SqliteParameter("@RequestPath", DbType.String) { Value = audit.RequestPath });
+                command.Parameters.Add(new SqliteParameter("@RequestBody", DbType.String) { Value = audit.RequestBody });
+                command.Parameters.Add(new SqliteParameter("@ResponseDate", DbType.String) { Value = audit.ResponseDate });
+                command.Parameters.Add(new SqliteParameter("@ResponseBody", DbType.String) { Value = audit.ResponseBody });
+                command.Parameters.Add(new SqliteParameter("@Timestamp", DbType.String) { Value = audit.Timestamp });
+                command.Parameters.Add(new SqliteParameter("@TrackingCode", DbType.String) { Value = AppConfiguration.TrackingCode });
+                command.Parameters.Add(new SqliteParameter("@DateIng", DbType.String) { Value = DateIng });
                 command.ExecuteNonQueryAsync();
             }
-           finally
+            finally
             {
                 CerrarConexion();
                 AppConfiguration.TrackingCode = "";
@@ -152,6 +153,60 @@ VALUES (@HosteName, @HostAddress, @AppSource, @User, @StatusCode, @RequestDate, 
             {
 
             }
+        }
+
+        private void CreateDatabaseDefaultIfNotExist()
+        {
+
+
+            Utilities.CreateDataBaseAuditIfNotExist();
+            {
+                try
+                {
+                    SetearConexion();
+                    bool exisTable = false;
+                    string tableName = "tbApplicationLog";
+                    string cmdText = $"SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='{tableName}';";
+
+                    using (SqliteCommand command = new(cmdText, Connection))
+                    {
+                        exisTable = Convert.ToBoolean(command.ExecuteScalar());
+                    }
+                    // Si la tabla no existe, la crea
+                    if (!exisTable)
+                    {
+                        string sentenciaTablaLog = @"
+                    CREATE TABLE IF NOT EXISTS tbApplicationLog (
+                        [ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        [HosteName] TEXT,
+                        [HostAddress] TEXT,
+                        [AppSource] TEXT,
+                        [User] TEXT,
+                        [StatusCode] INTEGER,
+                        [RequestDate] TEXT,
+                        [RequestMetod] TEXT,
+                        [RequestPath] TEXT,
+                        [RequestBody] TEXT,
+                        [ResponseDate] TEXT,
+                        [ResponseBody] TEXT,
+                        [Timestamp] TEXT,
+                        [TrackingCode] TEXT,
+                        [DateIng] TEXT
+                    );";
+                        using SqliteCommand com2 = new(sentenciaTablaLog, Connection);
+                        com2.ExecuteNonQueryAsync();
+                    }
+                }
+                catch (Exception e)
+                {
+
+                }
+                finally
+                {
+                    CerrarConexion();
+                }
+            }
+
         }
     }
 

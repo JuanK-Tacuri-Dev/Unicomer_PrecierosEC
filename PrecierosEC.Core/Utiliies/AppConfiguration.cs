@@ -15,10 +15,10 @@
 
 
         public static string ConnectionString { get; set; }
-        public static string ConnectionLogsString { get; set; }
+        public static string NameDatabaseLogs { get; set; }
         public static string RutaLogFichero { get; set; }
         public static string RutaLogDatabase { get; set; }
-        public static string ConnectionAuditsString { get; set; }
+        public static string NameDatabaseAudit { get; set; }
         public static string RutaAuditFichero { get; set; }
         public static string RutaAuditDatabase { get; set; }
 

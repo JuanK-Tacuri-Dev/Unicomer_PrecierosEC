@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System.Data;
 using System.Diagnostics;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
@@ -27,7 +29,6 @@ namespace PrecierosEC.Core.Utiliies
             return val;
         }
 
-
         public static string NothingToTexto(object texto)
         {
             if (texto == null)
@@ -35,7 +36,6 @@ namespace PrecierosEC.Core.Utiliies
             else
                 return texto.ToString();
         }
-
 
         [Obsolete]
         public static string GenerateLineLog(string mensaje, ref string CodigoSeguimiento)
@@ -52,6 +52,7 @@ namespace PrecierosEC.Core.Utiliies
             var errorLog = Conversions.DBNullToString(mensaje).Replace(Environment.NewLine, " ");
             return errorLog;
         }
+
 
         [Obsolete]
         public static string GenerateLineLog(Exception ex, ref string CodigoSeguimiento)
@@ -116,7 +117,7 @@ namespace PrecierosEC.Core.Utiliies
 
         public static string GetExcepcion(Exception ex)
         {
-            var excesion = "" + ex.ToString() + "---------"+ Environment.NewLine;
+            var excesion = "" + ex.ToString() + "---------" + Environment.NewLine;
             if (ex.InnerException != null)
                 excesion += GetExcepcion(ex.InnerException);
 
@@ -129,8 +130,29 @@ namespace PrecierosEC.Core.Utiliies
             using (StringWriter stringWriter = new StringWriter())
             {
                 serializer.Serialize(stringWriter, model);
-                return  stringWriter.ToString();
+                return stringWriter.ToString();
             }
+        }
+
+        public static void CreateDataBaseAuditIfNotExist()
+        {
+
+            if (!Directory.Exists(AppConfiguration.RutaAuditDatabase))
+                Directory.CreateDirectory(AppConfiguration.RutaAuditDatabase);
+
+            if (!File.Exists(Path.Combine(AppConfiguration.RutaAuditDatabase, AppConfiguration.NameDatabaseAudit)))
+                using (File.Create(Path.Combine(AppConfiguration.RutaAuditDatabase, AppConfiguration.NameDatabaseAudit))) { };
+        }
+
+        public static void CreateDataBaseErrorLogIfNotExist()
+        {
+
+            if (!Directory.Exists(AppConfiguration.RutaLogDatabase))
+                Directory.CreateDirectory(AppConfiguration.RutaLogDatabase);
+
+            if (!File.Exists(Path.Combine(AppConfiguration.RutaLogDatabase, AppConfiguration.NameDatabaseLogs)))
+                using (File.Create(Path.Combine(AppConfiguration.RutaLogDatabase, AppConfiguration.NameDatabaseLogs))) { };
+
         }
     }
 
