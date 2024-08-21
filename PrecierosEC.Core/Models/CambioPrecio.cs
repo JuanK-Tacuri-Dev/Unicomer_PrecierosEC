@@ -1,4 +1,7 @@
-﻿namespace PrecierosEC.Core.Models
+﻿using System.Collections.Generic;
+using System.Reflection;
+
+namespace PrecierosEC.Core.Models
 {
     public class CambioPrecio
     {
@@ -46,7 +49,11 @@
         public string csrDescription { get; set; }
         public string csrDuration { get; set; }
         public string csrPrice { get; set; }
+        public string csrpricepercent { get; set; }
     }
 
 
 }
+
+
+ 
