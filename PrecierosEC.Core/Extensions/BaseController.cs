@@ -6,17 +6,19 @@ using PrecierosEC.Core.Utiliies;
 namespace PrecierosEC.Core.Extensions
 {
 
-    public class BaseController : Controller
+    public class BaseController<T> : Controller
     {
         readonly IServiceErrorLog ErrorLog;
         public string message = "";
+
+        public T Model { get; set; }
         public BaseController(IServiceErrorLog _ErrorLog)
         {
             ErrorLog = _ErrorLog;
         }
         protected void SaveErrorLog(Exception ex) => this.message = string.Format(MensaggeErrorLog.ErrorGeneral,ErrorLog.SaveErrorlog(ex));
 
-        protected Response<T> addResponse<T>(T info)
+        protected Response<T> addResponse(T info)
         {
             return new Response<T>
             {
@@ -25,18 +27,18 @@ namespace PrecierosEC.Core.Extensions
                 Exito = string.IsNullOrEmpty(this.message)
             };
         }
-        protected Response<T> addResponse<T>()
+        //protected Response<T> addResponse<T>()
+        //{
+        //    return new Response<T>
+        //    {
+        //        Mensaje = this.message,
+        //        Exito = string.IsNullOrEmpty(this.message)
+        //    };  
+        //}
+       // protected IActionResult BadRequestResult()=> BadRequest(addResponse<string>());
+        protected IActionResult HttpResult()
         {
-            return new Response<T>
-            {
-                Mensaje = this.message,
-                Exito = string.IsNullOrEmpty(this.message)
-            };  
-        }
-        protected IActionResult BadRequestResult()=> BadRequest(addResponse<string>());
-        protected IActionResult OkResult(object info)
-        {
-            var Response = addResponse(info);
+            var Response = addResponse(this.Model);
 
             if (string.IsNullOrEmpty(this.message))
                 return Ok(Response);

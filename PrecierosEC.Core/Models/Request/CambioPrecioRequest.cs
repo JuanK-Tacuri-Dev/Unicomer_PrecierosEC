@@ -9,5 +9,7 @@
         public string fecha { get; set; }
         public string clase { get; set; }
         public string departamento { get; set; }
+        public string storeCode { get; set; }
     }
 }
+

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace PrecierosEC.Core.Models
 {
@@ -54,6 +55,3 @@ namespace PrecierosEC.Core.Models
 
 
 }
-
-
- 
