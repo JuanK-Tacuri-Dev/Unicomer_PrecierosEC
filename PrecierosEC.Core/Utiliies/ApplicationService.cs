@@ -2,11 +2,11 @@
 {
     public static class ApplicationService
     {
-        public static void Configure()
+        public static void Configure(string nameFile)
         {
             string mensaje = null;
 
-            var settings = Utilities.LeerAppSettings<ApiSettings>(typeof(ApiSettings), ref mensaje);
+            var settings = Utilities.LeerAppSettings<ApiSettings>(typeof(ApiSettings), ref mensaje, nameFile);
 
             AppConfiguration.NameApi_Title = settings.NameApi.Title;
             AppConfiguration.NameApi_Version = settings.NameApi.Version;

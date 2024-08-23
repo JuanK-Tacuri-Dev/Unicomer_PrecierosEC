@@ -12,13 +12,13 @@ namespace PrecierosEC.Core.Utiliies
     public class Utilities
     {
 
-        public static T LeerAppSettings<T>(Type type, ref string mensaje, string nameFile = "appsettings.json")
+        public static T LeerAppSettings<T>(Type type, ref string mensaje, string nameFile)
         {
             string directoryName = Path.GetDirectoryName(type.Assembly.Location);
             IConfigurationRoot configuration = new ConfigurationBuilder().SetBasePath(directoryName).AddJsonFile(nameFile).Build();
             T val = configuration.Get<T>();
             if (val == null)
-                mensaje = "Archivo appsettings.json inválido";
+                mensaje = $"Archivo {nameFile}inválido";
 
             return val;
         }
