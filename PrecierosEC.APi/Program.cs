@@ -5,8 +5,8 @@ using PrecierosEC.Core.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCorsProgram();
-builder.Services.SetAppsetings(builder.Configuration);
-builder.Services.AddDependecyInjections(builder.Configuration);
+builder.Services.SetAppsetings();
+builder.Services.AddDependecyInjections();
 builder.Services.AddScoped<IPrecierosService, PrecierosService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.SwaggerGen();

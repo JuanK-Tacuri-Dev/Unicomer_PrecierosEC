@@ -4,6 +4,7 @@ using PrecierosEC.Core.Interface.Service;
 using PrecierosEC.Core.Models;
 using PrecierosEC.Core.Utiliies;
 using System.Data;
+using System.Numerics;
 using System.Xml;
 using static PrecierosEC.Core.Utiliies.Constants;
 
@@ -16,7 +17,7 @@ namespace PrecierosEC.Core.Service
         public void SetearConexion()
         {
             SQLitePCL.Batteries.Init();
-            Connection = new SqliteConnection($"data source={Path.Combine(AppConfiguration.RutaLogDatabase,AppConfiguration.NameDatabaseLogs)}");
+            Connection = new SqliteConnection($"data source={Path.Combine(AppConfiguration.RutaLogDatabase, AppConfiguration.NameDatabaseLogs)}");
             Connection.Open();
         }
         public void CerrarConexion()
@@ -71,7 +72,7 @@ namespace PrecierosEC.Core.Service
 
                 CreateDatabaseDefaultIfNotExist();
                 string Mensaje = Utilities.GenerateLineLog(Exception, ref CodigoSeguimiento);
-                
+
                 SaveErrorLog(new ErrorLogModel(AppConfiguration.ApiData, Exception, MessageType.Error, Mensaje, Exception.StackTrace, AppConfiguration.NonUserLog, CodigoSeguimiento));
             }
             catch (Exception ex)
@@ -112,22 +113,22 @@ namespace PrecierosEC.Core.Service
 
 
             Utilities.CreateDataBaseErrorLogIfNotExist();
-            {
-                try
-                {
-                    SetearConexion();
-                    bool exisTable = false;
-                    string tableName = "tbErrorLog";
-                    string cmdText = $"SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='{tableName}';";
 
-                    using (SqliteCommand command = new(cmdText, Connection))
-                    {
-                        exisTable = Convert.ToBoolean(command.ExecuteScalar());
-                    }
-                    // Si la tabla no existe, la crea
-                    if (!exisTable)
-                    {
-                        string sentenciaTablaLog = @"
+            try
+            {
+                SetearConexion();
+                bool exisTable = false;
+                string tableName = "tbErrorLog";
+                string cmdText = $"SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='{tableName}';";
+
+                using (SqliteCommand command = new(cmdText, Connection))
+                {
+                    exisTable = Convert.ToBoolean(command.ExecuteScalar());
+                }
+                // Si la tabla no existe, la crea
+                if (!exisTable)
+                {
+                    string sentenciaTablaLog = @"
                             CREATE TABLE IF NOT EXISTS tbErrorLog (
 	                            [IdLog]	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	                            [Date]	TEXT,
@@ -138,21 +139,21 @@ namespace PrecierosEC.Core.Service
 	                            [AdditionalInformation]	TEXT,
 	                            [TrackingCode]	TEXT
                             );";
-                        using SqliteCommand com2 = new(sentenciaTablaLog, Connection);
-                        com2.ExecuteNonQueryAsync();
-                    }
-                }
-                catch (Exception e)
-                {
-                    
-                }
-                finally
-                {
-                    CerrarConexion();
+                    using SqliteCommand com2 = new(sentenciaTablaLog, Connection);
+                    com2.ExecuteNonQueryAsync();
                 }
             }
-            
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                CerrarConexion();
+            }
+
+
         }
 
     }
-}
+}   

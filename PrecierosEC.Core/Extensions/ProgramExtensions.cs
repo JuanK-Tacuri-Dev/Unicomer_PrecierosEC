@@ -22,9 +22,9 @@ namespace PrecierosEC.Core.Extensions
             });
 
         }
-        public static void SetAppsetings(this IServiceCollection services, IConfiguration configuration)
+        public static void SetAppsetings(this IServiceCollection services)
         {
-            ApplicationService.Configure(services, configuration);
+            ApplicationService.Configure();
         }
 
  

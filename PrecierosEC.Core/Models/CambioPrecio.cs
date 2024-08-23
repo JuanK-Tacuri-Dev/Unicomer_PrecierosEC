@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Text.Json.Serialization;
 
 namespace PrecierosEC.Core.Models
 {
@@ -41,6 +42,8 @@ namespace PrecierosEC.Core.Models
         public string classCode { get; set; }
         public string classDesc { get; set; }
         public string skuType { get; set; }
+        [JsonIgnore]
+        public string id { get; set; }
         public List<Garantia> garantias { get; set; }
     }
 
@@ -51,6 +54,8 @@ namespace PrecierosEC.Core.Models
         public string csrDuration { get; set; }
         public string csrPrice { get; set; }
         public string csrpricepercent { get; set; }
+        [JsonIgnore]
+        public string id { get; set; }
     }
 
 

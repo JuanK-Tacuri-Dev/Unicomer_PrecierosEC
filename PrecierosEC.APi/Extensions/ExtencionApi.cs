@@ -1,5 +1,4 @@
-﻿using PrecierosEC.Core.Extensions;
-using PrecierosEC.Core.Interface.Service;
+﻿using PrecierosEC.Core.Interface.Service;
 using PrecierosEC.Core.Repositories;
 using PrecierosEC.Core.Service;
 
@@ -7,7 +6,7 @@ namespace PrecierosEC.APi.Extensions
 {
     public static class ExtencionApi
     {
-        public static void AddDependecyInjections(this IServiceCollection services, IConfiguration configuration)
+        public static void AddDependecyInjections(this IServiceCollection services)
         {
             
             services.AddControllers();

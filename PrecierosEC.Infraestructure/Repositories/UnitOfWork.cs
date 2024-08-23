@@ -124,7 +124,7 @@ namespace PrecierosEC.Core.Repositories
             if (result != null)
                 garantia = Utilities.Serialize_DataTable_To_Object<Garantia>(this.query.Tables[1]).ToList();
 
-            result?.Producto.ForEach(x => x.garantias = garantia ?? null);
+            result?.Producto.ForEach(x => x.garantias = garantia.Where(y=>y.id==x.id).ToList());
 
             return result;
         }
