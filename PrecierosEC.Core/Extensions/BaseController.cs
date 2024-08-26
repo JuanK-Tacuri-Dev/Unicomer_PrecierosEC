@@ -17,7 +17,7 @@ namespace PrecierosEC.Core.Extensions
 
         protected void SaveErrorLog(Exception ex) => this.message = string.Format(MensaggeErrorLog.ErrorGeneral, ErrorLog.SaveErrorlog(ex));
 
-        private string AddResponse()
+        private void AddResponse()
         {
             this.Data = new Response<T>
             {
@@ -25,8 +25,6 @@ namespace PrecierosEC.Core.Extensions
                 Info = this.Model,
                 Exito = string.IsNullOrEmpty(this.message)
             };
-
-            return this.message;
 
         }
         //protected Response<T> addResponse<T>()
@@ -38,6 +36,14 @@ namespace PrecierosEC.Core.Extensions
         //    };  
         //}
         // protected IActionResult BadRequestResult()=> BadRequest(addResponse<string>());
-        protected IActionResult HttpResult() => string.IsNullOrEmpty(AddResponse()) ? Ok(this.Data) : BadRequest(this.Data);
+        protected IActionResult HttpResult()
+        {
+            this.AddResponse();
+            if (string.IsNullOrEmpty(this.message)) 
+                return Ok(this.Data);
+            else
+                return BadRequest(this.Data);
+
+        }
     }
 }
