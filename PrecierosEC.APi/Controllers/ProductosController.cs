@@ -7,10 +7,12 @@ namespace PrecierosEC.APi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductosController : BaseController
+    public class ProductosController : BaseController<object>
     {
+        
         private readonly IPrecierosService PrecierosService;
-        public ProductosController(IPrecierosService _PrecierosService, IServiceErrorLog _ServiceErrorLog) : base(_ServiceErrorLog)
+        public ProductosController(IPrecierosService _PrecierosService, IServiceErrorLog _ServiceErrorLog)
+            :base(_ServiceErrorLog)
         {
             PrecierosService = _PrecierosService;
         }
@@ -20,13 +22,14 @@ namespace PrecierosEC.APi.Controllers
         {
             try
             {
-                return OkResult(PrecierosService.ItemServiceQuery(country, storeId, SKU, ref message));
+                this.Model = PrecierosService.ItemServiceQuery(country, storeId, SKU, ref message);
             }
             catch (Exception ex)
             {
                 this.SaveErrorLog(ex);
-                return BadRequestResult();
             }
+
+            return HttpResult();
         }
 
         [HttpGet("PlanCreditoQuery")]
@@ -34,13 +37,13 @@ namespace PrecierosEC.APi.Controllers
         {
             try
             {
-                return OkResult(PrecierosService.PlanCreditoQuery(country, companyId, amountToFinance, installments, interestRate, paymentCycle, defferedPeriods, treatment, storeId, sku, warrantyid, ref message));
+                this.Model = PrecierosService.PlanCreditoQuery(country, companyId, amountToFinance, installments, interestRate, paymentCycle, defferedPeriods, treatment, storeId, sku, warrantyid, ref message);
             }
             catch (Exception ex)
             {
                 this.SaveErrorLog(ex);
-                return BadRequestResult();
             }
+            return HttpResult();
         }
 
         [HttpPost("CambioPrecioQuery")]
@@ -48,13 +51,13 @@ namespace PrecierosEC.APi.Controllers
         {
             try
             {
-                return OkResult(PrecierosService.CambioPrecioQuery(body, ref message));
+                this.Model = PrecierosService.CambioPrecioQuery(body, ref message);
             }
             catch (Exception ex)
             {
                 this.SaveErrorLog(ex);
-                return BadRequestResult();
             }
+            return HttpResult();
         }
 
     }

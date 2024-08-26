@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using PrecierosEC.Core.Interface;
@@ -12,7 +14,6 @@ namespace PrecierosEC.Core.Extensions
 
         public static void AddCorsProgram(this IServiceCollection services)
         {
-
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", builder =>
@@ -22,12 +23,11 @@ namespace PrecierosEC.Core.Extensions
             });
 
         }
-        public static void SetAppsetings(this IServiceCollection services, IConfiguration configuration)
+        public static void SetAppsetings(this IServiceCollection services, string nameFile)
         {
-            ApplicationService.Configure(services, configuration);
+            ApplicationService.Configure(nameFile);
         }
 
- 
 
         public static void SwaggerGen(this IServiceCollection services)
         {
