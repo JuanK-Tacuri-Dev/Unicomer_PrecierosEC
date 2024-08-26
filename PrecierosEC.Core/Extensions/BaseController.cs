@@ -27,15 +27,7 @@ namespace PrecierosEC.Core.Extensions
             };
 
         }
-        //protected Response<T> addResponse<T>()
-        //{
-        //    return new Response<T>
-        //    {
-        //        Mensaje = this.message,
-        //        Exito = string.IsNullOrEmpty(this.message)
-        //    };  
-        //}
-        // protected IActionResult BadRequestResult()=> BadRequest(addResponse<string>());
+
         protected IActionResult HttpResult()
         {
             this.AddResponse();

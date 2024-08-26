@@ -9,7 +9,6 @@ namespace PrecierosEC.APi.Controllers
     [Route("api/[controller]")]
     public class ProductosController : BaseController<object>
     {
-        
         private readonly IPrecierosService PrecierosService;
         public ProductosController(IPrecierosService _PrecierosService, IServiceErrorLog _ServiceErrorLog)
             :base(_ServiceErrorLog)
