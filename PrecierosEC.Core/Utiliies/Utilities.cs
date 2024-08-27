@@ -40,7 +40,7 @@ namespace PrecierosEC.Core.Utiliies
             MappedDiagnosticsLogicalContext.Set("Origen", Origen_lo);
             MappedDiagnosticsLogicalContext.Set("Linea", sf.GetFileLineNumber());
 
-            var Codigo = $"E{Guid.NewGuid().ToString("N").ToUpper().Substring(0, 5)}{DateTime.Now.ToString("hhmmssffffff")}";
+            var Codigo = $"E{Guid.NewGuid().ToString("N").ToUpper()[..5]}{DateTime.Now:hhmmssffffff}";
             MappedDiagnosticsLogicalContext.Set("CodigoSeguimiento", Codigo);
             CodigoSeguimiento = MappedDiagnosticsLogicalContext.Get("CodigoSeguimiento");
             var errorLog = Conversions.DBNullToString(Conversions.ExceptionToString(ex)).Replace(Environment.NewLine, " ");
@@ -74,9 +74,9 @@ namespace PrecierosEC.Core.Utiliies
         }
         public static string ConvertObjectToXml<T>(T model)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            XmlSerializer serializer = new(typeof(T));
 
-            using StringWriter stringWriter = new StringWriter();
+            using StringWriter stringWriter = new();
             serializer.Serialize(stringWriter, model);
             return stringWriter.ToString();
         }

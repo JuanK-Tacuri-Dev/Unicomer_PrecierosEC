@@ -28,7 +28,7 @@ namespace PrecierosEC.Core.Service
                 if (Connection.State == ConnectionState.Open)
                     Connection.CloseAsync();
 
-                Connection.DisposeAsync();
+                Connection.Dispose();
                 Connection = null;
             }
 

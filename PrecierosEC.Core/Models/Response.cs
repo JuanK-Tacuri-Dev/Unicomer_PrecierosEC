@@ -4,49 +4,36 @@ namespace PrecierosEC.Core.Models
 {
     public class Response<T>
     {
+        public Response()
+        {
+            this.Resultado = new Result();
+        }
+
+        [JsonProperty("resultado")]
+        public Result Resultado { get; set; }
+
+        [JsonProperty("detalle")]
+        public T Detalle { get; set; }
+
+    }
+
+    public class Result
+    {
+        public Result()
+        {
+            
+        }
+        public Result(string mensaje, bool estado)
+        {
+            this.Estado = estado;
+            this.Mensaje = mensaje;
+        }
         [JsonProperty("mensaje")]
         public string Mensaje { get; set; }
-        [JsonProperty("exito")]
-        public bool Exito { get; set; }
-        [JsonProperty("info")]
-        public T Info { get; set; }
-       
+        [JsonProperty("estado")]
+        public bool Estado { get; set; }
+
+
     }
 
-    public class ResponseData
-    {
-        public static Response<T> GetResponse<T>(  T info, string mensaje="OK", bool exito = true)
-        {
-            return new Response<T>
-            {
-                Info = info,
-                Mensaje = mensaje,
-                Exito = exito
-            };
-        }
-
-        public static Response<T> GetResponse<T>(string mensaje, bool exito = true)
-        {
-            return new Response<T>
-            {
-                Mensaje = mensaje,
-                Exito = exito
-            };
-        }
-        public static Response<T> GetResponse<T>(string mensaje)
-        {
-            return new Response<T>
-            {
-                Mensaje = mensaje,
-                Exito = string.IsNullOrEmpty(mensaje) 
-        };
-        }
-        public static Response<T> GetResponseT<T>(T info)
-        {
-            return new Response<T>
-            {
-                Info = info
-            };
-        }
-    }
 }

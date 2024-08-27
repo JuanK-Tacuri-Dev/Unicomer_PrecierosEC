@@ -17,7 +17,6 @@
             AppConfiguration.NameApi_ContactEmail = settings.NameApi.Contact.Email;
             AppConfiguration.NameApi_ContactUrl = settings.NameApi.Contact.Url;
 
-
             AppConfiguration.ApiData = settings.ErrorLogSource.ApiData;
             AppConfiguration.NonUserLog = settings.ErrorLogSource.NonUserLog;
             AppConfiguration.Custom = settings.ErrorLogSource.Custom;
@@ -34,6 +33,6 @@
 
         }
 
-        private static string ConcectionString(string Conectionstring)=>DbConnectionHelper.fnDesencripta(Conectionstring);
+        private static string ConcectionString(string Conectionstring)=>DbConnectionHelper.FnDesencripta(Conectionstring);
     }
 }

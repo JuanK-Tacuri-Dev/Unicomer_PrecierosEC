@@ -21,9 +21,9 @@ namespace PrecierosEC.Core.Extensions
         {
             this.Data = new Response<T>
             {
-                Mensaje = string.IsNullOrEmpty(this.message) ? "OK" : this.message,
-                Info = this.Model,
-                Exito = string.IsNullOrEmpty(this.message)
+                Resultado = new Result(this.message, string.IsNullOrEmpty(this.message)),
+                Detalle = this.Model,
+                
             };
 
         }

@@ -1,6 +1,6 @@
 ﻿using PrecierosEC.Core.Interface.Service;
-using PrecierosEC.Core.Repositories;
 using PrecierosEC.Core.Service;
+using PrecierosEC.Infraestructure.Repositories;
 
 namespace PrecierosEC.APi.Extensions
 {
