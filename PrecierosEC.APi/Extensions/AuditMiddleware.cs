@@ -33,7 +33,6 @@ namespace PrecierosEC.APi.Extensions
         {
             _next = next;
         }
-
         public async Task InvokeAsync(HttpContext context)
         {
             var RequestDate = DateTime.UtcNow;
@@ -43,15 +42,18 @@ namespace PrecierosEC.APi.Extensions
 
             var request = context.Request;
             var requestBody = string.Empty;
-            if (request.ContentLength > 0)
+
+            // Manejo de Request Body solo para métodos distintos de GET
+            if (request.Method != HttpMethods.Get && request.ContentLength > 0)
             {
                 request.EnableBuffering();
                 using var reader = new StreamReader(request.Body, leaveOpen: true);
-
                 requestBody = await reader.ReadToEndAsync();
                 request.Body.Seek(0, SeekOrigin.Begin);
-
             }
+
+            // Construir el RequestPath incluyendo los parámetros de la consulta
+            var fullRequestPath = request.Path + request.QueryString;
 
             try
             {
@@ -66,11 +68,12 @@ namespace PrecierosEC.APi.Extensions
                 var hostAddress = context.Connection.RemoteIpAddress?.ToString();
                 var ResponseDate = DateTime.UtcNow;
                 var Timestamp = (ResponseDate - RequestDate).TotalSeconds;
+
                 var auditLog = new
                 {
                     RequestMethod = request.Method,
                     RequestDate = RequestDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                    RequestPath = request.Path.ToString(),
+                    RequestPath = fullRequestPath, // Usar el RequestPath completo con parámetros
                     RequestBody = requestBody,
                     ResponseBody = responseBody,
                     ResponseDate = ResponseDate.ToString("yyyy-MM-dd HH:mm:ss"),
@@ -79,7 +82,6 @@ namespace PrecierosEC.APi.Extensions
                     StatusCode = context.Response.StatusCode,
                     Timestamp = Timestamp.ToString()
                 };
-
 
                 try
                 {
@@ -90,10 +92,73 @@ namespace PrecierosEC.APi.Extensions
                 {
                     WriteLogToFileAsync(ex);
                 }
+
                 responseBodyStream.Seek(0, SeekOrigin.Begin);
                 await responseBodyStream.CopyToAsync(originalResponseBodyStream);
             }
         }
+
+        //public async Task InvokeAsync(HttpContext context)
+        //{
+        //    var RequestDate = DateTime.UtcNow;
+        //    var originalResponseBodyStream = context.Response.Body;
+        //    using var responseBodyStream = new MemoryStream();
+        //    context.Response.Body = responseBodyStream;
+
+        //    var request = context.Request;
+        //    var requestBody = string.Empty;
+        //    if (request.ContentLength > 0)
+        //    {
+        //        request.EnableBuffering();
+        //        using var reader = new StreamReader(request.Body, leaveOpen: true);
+
+        //        requestBody = await reader.ReadToEndAsync();
+        //        request.Body.Seek(0, SeekOrigin.Begin);
+
+        //    }
+
+        //    try
+        //    {
+        //        await _next(context);
+        //    }
+        //    finally
+        //    {
+        //        responseBodyStream.Seek(0, SeekOrigin.Begin);
+        //        var responseBody = await new StreamReader(responseBodyStream).ReadToEndAsync();
+        //        responseBodyStream.Seek(0, SeekOrigin.Begin);
+        //        var hostName = context.Connection.LocalIpAddress?.ToString();
+        //        var hostAddress = context.Connection.RemoteIpAddress?.ToString();
+        //        var ResponseDate = DateTime.UtcNow;
+        //        var Timestamp = (ResponseDate - RequestDate).TotalSeconds;
+
+        //        var auditLog = new
+        //        {
+        //            RequestMethod = request.Method,
+        //            RequestDate = RequestDate.ToString("yyyy-MM-dd HH:mm:ss"),
+        //            RequestPath = request.Path.ToString(),
+        //            RequestBody = requestBody,
+        //            ResponseBody = responseBody,
+        //            ResponseDate = ResponseDate.ToString("yyyy-MM-dd HH:mm:ss"),
+        //            HostName = hostName,
+        //            HostAddress = hostAddress,
+        //            StatusCode = context.Response.StatusCode,
+        //            Timestamp = Timestamp.ToString()
+        //        };
+
+
+        //        try
+        //        {
+        //            CreateDatabaseDefaultIfNotExist();
+        //            SaveAuditLog(auditLog);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            WriteLogToFileAsync(ex);
+        //        }
+        //        responseBodyStream.Seek(0, SeekOrigin.Begin);
+        //        await responseBodyStream.CopyToAsync(originalResponseBodyStream);
+        //    }
+        //}
 
 
         public void SaveAuditLog(object model)
